@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+MCMC_temp.csv
+.~lock.*
+*.DS_Store
+*.pdf
+*estim_*
