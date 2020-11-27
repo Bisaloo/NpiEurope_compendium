@@ -1,26 +1,54 @@
+Type: Compendium
 Package: NpiEurope
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Title: Research Compendium for Garchitorena et al. (2020)
+Version: 0.1
+Authors@R: c(
+    person(given = "Andres", family = "Garchitorena",
+           role = "aut"),
+    person(given = "Hugo", family = "Gruson",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "hugo.gruson+R@normalesup.org",
+           comment = c(ORCID = "0000-0002-4094-1476")),
+    person(given = "Bernard", family = "Cazelles",
+           role = "aut"),
+    person(given = "Tommi", family = "Karki",
+           role = "aut"),
+    person(given = "Bertrand", family = "Sudre",
+           role = "aut"),
+    person(given = "Benjamin", family = "Roche",
+           role = "aut")
+    )
+Description: Research Compendium for <doi:10.1101/2020.08.17.20174821>
 License: GPL-3
+Depends: 
+    corrplot,
+    doParallel,
+    dplyr,
+    foreach,
+    ggcorrplot,
+    ggplot2,
+    grid,
+    gridExtra,
+    hrbrthemes,
+    lme4,
+    mvtnorm,
+    NpiEurope,
+    parallel,
+    patchwork,
+    readr,
+    readxl,
+    remotes,
+    reshape,
+    sirage,
+    slider,
+    tibble,
+    tidyr
+Remotes: 
+    Bisaloo/Npieurope,
+    Bisaloo/sir_age,
+    tidyverse/ggplot2
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
-Imports:
-  mvtnorm,
-  readxl,
-  dplyr (>= 1.0.0),
-  readr,
-  ggplot2,
-  sirage,
-  slider,
-  tibble,
-  tidyr
-Remotes:
-  Bisaloo/sir_age
