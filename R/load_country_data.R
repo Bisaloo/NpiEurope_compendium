@@ -10,10 +10,11 @@
 #'
 #' @export
 load_country_data <- function(country, dataset_path = NULL) {
-
   if (length(country) != 1) {
     stop("Processing of multiple countries at once is not yet implemented. ",
-         "Please provide a single country name in 'country'", call. = FALSE)
+      "Please provide a single country name in 'country'",
+      call. = FALSE
+    )
   }
 
   if (is.null(dataset_path)) {
@@ -37,7 +38,9 @@ load_country_data <- function(country, dataset_path = NULL) {
 
   if (nrow(country_data) == 0) {
     stop("This country is not included in our dataset. ",
-         "Please double check spelling", call. = FALSE)
+      "Please double check spelling",
+      call. = FALSE
+    )
   }
 
   return(country_data)

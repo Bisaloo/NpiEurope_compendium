@@ -10,15 +10,18 @@ remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 
 temp <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
-                 stringsAsFactors = FALSE) %>%
+  stringsAsFactors = FALSE
+) %>%
   filter(Date <= "2020-09-08")
 
 countryVec <- sort(unique(temp$Country))
 
 temp <- temp %>%
   group_by(Country) %>%
-  mutate(cum_cases = cumsum(NewCases),
-         simulated = NA_real_)
+  mutate(
+    cum_cases = cumsum(NewCases),
+    simulated = NA_real_
+  )
 
 folder <- "MCMCOK5"
 
@@ -44,17 +47,18 @@ for (i in 1:length(countryVec)) {
   ggsave(sprintf("%s/mcmc_%s.pdf", folder, country))
 
   write.csv(
-    summarise_estimation(sprintf("%s/%s.csv",folder,country), npi_data, contact_data, age_data),
-    sprintf("%s/estim_%s.csv",folder,country)
+    summarise_estimation(sprintf("%s/%s.csv", folder, country), npi_data, contact_data, age_data),
+    sprintf("%s/estim_%s.csv", folder, country)
   )
   # knitr::kable(summarise_estimation(sprintf("MCMCNew/MCMC_%s.csv",country), country_data))
 
   sims <- simulate_trajectory(sprintf("%s/%s.csv", folder, country),
-                              epi_data, npi_data, contact_data, age_data,
-                              Npost = 5)
+    epi_data, npi_data, contact_data, age_data,
+    Npost = 5
+  )
 
   sims <- t(do.call(rbind, sims))
-  temp$simulated[temp$Country==country & !is.na(temp$cum_cases) & temp$cum_cases > 0] <- apply(sims, MARGIN = 2, median)
+  temp$simulated[temp$Country == country & !is.na(temp$cum_cases) & temp$cum_cases > 0] <- apply(sims, MARGIN = 2, median)
 
   tempG <- plot_simulations(sims, country_data) + ggtitle(country)
   pGraph[[length(pGraph) + 1]] <- tempG
@@ -66,7 +70,8 @@ p <- ggplot(temp, aes(x = NewCases, y = simulated, color = Country)) +
   scale_x_continuous(trans = "log10") +
   scale_y_continuous(trans = "log10") +
   geom_abline(slope = 1, col = "black", linetype = "dashed") +
-  xlab("Observed cases") + ylab("Simulated cases") +
+  xlab("Observed cases") +
+  ylab("Simulated cases") +
   theme_minimal()
 
 # pGraph[[length(pGraph) + 1]] <- p

@@ -7,7 +7,6 @@
 #' @export
 
 load_contact_data <- function(country) {
-
   contact_data <- read_xlsx(
     system.file("extdata", "ctc.xlsx", package = "NpiEurope"),
     col_names = FALSE,
