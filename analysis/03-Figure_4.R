@@ -22,9 +22,6 @@ dfMat <- data.frame(matResults)
 ii <- match(dfMat$GDP, gdp)
 dfMat$country <- countryVec[ii]
 
-# Get duration of intervention
-dfMat$duration <- dfMat$DayEnd - dfMat$DayStart
-
 # Estimate difference of efficiency from previous strategy
 dfMat_ts <- dfMat
 pos <- 0

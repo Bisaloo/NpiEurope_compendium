@@ -13,9 +13,6 @@ temp <- read.csv("inst/extdata/COVID_time_series_v4_2020-06-26.csv", stringsAsFa
 countryVec <- sort(unique(temp$Country))
 dfMat <- data.frame(matResults)
 
-# Get duration of intervention
-dfMat$duration <- dfMat$DayEnd - dfMat$DayStart
-
 # Prepare plot for number of countries and duration of intervention
 pos <- 0
 country.duration <- dfMat[, 1:24] * dfMat$duration

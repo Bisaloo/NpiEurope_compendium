@@ -87,4 +87,7 @@ for (i in seq_len(nrow(matResults))) {
   combStrat <- c(combStrat, sum(matResults[i, 1:24]))
 }
 colnames(matResults) <- c(stratUn, "Efficiency", "DayStart", "DayEnd", "GDP", "Country", "NbStrategies")
+
+matResults$duration <- matResults$DayEnd - matResults$DayStart
+
 save(matResults, file = "matResults.RData")
