@@ -15,6 +15,7 @@ npi_europe <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.c
   filter(Date <= "2020-09-08") %>%
   select(!any_of(c("NewCases", "NewDeaths", "Population", "Date")))
 
+# Subfig A
 (
 duration_plot <- npi_europe %>%
   group_by(Country) %>%
@@ -37,6 +38,7 @@ duration_plot <- npi_europe %>%
 
 library(ggcorrplot)
 
+# Subfig B
 (
 correlation_plot <- npi_europe %>%
   select(-Country) %>%
@@ -49,6 +51,7 @@ correlation_plot <- npi_europe %>%
              legend.title = "Correlation")
 )
 
+# Collage
 library(patchwork)
 
 duration_plot + correlation_plot +
