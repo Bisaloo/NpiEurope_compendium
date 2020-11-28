@@ -1,21 +1,33 @@
-#-------------------------------------------------
-# Summary of public health responses efficiencies
-#-------------------------------------------------
+---
+title: "Figure 1: Summary of public health responses"
+author: "Hugo Gruson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
+
+```{r}
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(tibble)
+```
 
-dfMat <- readRDS("matResults.rds")
+```{r}
+dfMat <- readRDS("../matResults.rds")
+```
 
 # Subfig A
+
+```{r}
 (
 hist_plot <- ggplot(dfMat, aes(y = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
   labs(x = "Public Health Responses")
 )
+```
 
+```{r}
 (
 number_efficiency_plot <- ggplot(dfMat, aes(x = NbStrategies, y = Efficiency)) +
   geom_point() +
@@ -24,8 +36,11 @@ number_efficiency_plot <- ggplot(dfMat, aes(x = NbStrategies, y = Efficiency)) +
   labs(x = "NPIs implemented") +
   scale_x_continuous(breaks = seq(1, 13, 2))
 )
+```
 
 # Subfig B
+
+```{r}
 (
 efficiency_uni_plot <- dfMat %>%
   select(-DayStart, -DayEnd, -GDP, -Country, -duration) %>%
@@ -40,8 +55,11 @@ efficiency_uni_plot <- dfMat %>%
     scale_x_continuous(breaks = seq(1, 11)) +
     labs(x = "NPIs implemented", y = "")
 )
+```
 
 # Subfig C: NPI in the highest efficiency responses
+
+````{r}
 (
 max_efficiency_plot <- dfMat %>%
   arrange(NbStrategies) %>%
@@ -62,11 +80,17 @@ max_efficiency_plot <- dfMat %>%
     labs(x = "NPIs implemented", y = "") +
     theme(legend.position = "none")
 )
+```
 
 # Collage
+
+```{r}
 library(patchwork)
 
 ((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) &
   (theme_bw() + theme(legend.position = "none"))
+```
 
+```{r echo = FALSE, eval = FALSE}
 ggsave("Figure 3.pdf", width = 29.7, height = 21, units = "cm")
+```

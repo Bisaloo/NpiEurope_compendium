@@ -1,62 +1,44 @@
+---
+title: "Figure 1: Summary of public health responses"
+author: "Hugo Gruson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
+
+```{r}
 #-------------------------------------------------
 # Summary of public health responses efficiencies
 #-------------------------------------------------
-library(ggplot2)
-library(hrbrthemes)
-library(corrplot)
-library(reshape)
-library(lme4)
-library(dplyr)
-library(gridExtra)
-
 dfMat <- readRDS("matResults.rds")
 
-# Estimate difference of efficiency from previous strategy
-dfMat_ts <- dfMat
-pos <- 0
-dfMat_ts$dif.efficiency <- NA
-for (i in unique(dfMat_ts$Country)) {
-  my.db <- dfMat_ts[dfMat_ts$Country == i, ]
-  for (j in 1:nrow(my.db)) {
-    pos <- pos + 1
-    if (j == 1) {
-      dfMat_ts$dif.efficiency[pos] <- dfMat_ts$Efficiency[pos]
-    }
-    else {
-      dfMat_ts$dif.efficiency[pos] <- dfMat_ts$Efficiency[pos] - dfMat_ts$Efficiency[pos - 1]
-      for (k in 1:24) {
-        if (dfMat[pos, k] == 1 & dfMat[pos - 1, k] == 1) {
-          dfMat_ts[pos, k] <- 0
-        }
-        if (dfMat[pos, k] == 0 & dfMat[pos - 1, k] == 1) {
-          dfMat_ts[pos, k] <- -1
-        }
-      }
-    }
-  }
-}
-dfMat_ts$GDP <- dfMat_ts$GDP / 10000
+library(dplyr)
+
+dfMat <- dfMat %>%
+  group_by(Country) %>%
+  mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
+         GDP = GDP / 1e4)
+
 #----------------------------------------------------------
 # Model change in efficiency per day from time series data
 #----------------------------------------------------------
 # Univariate with and without control for GDP and Nb Interventions
 my.table_ts <- array(NA, c(24, 7))
 for (i in 1:24) {
-  my.var <- colnames(dfMat_ts)[i]
+  my.var <- colnames(dfMat)[i]
   # Univariate model
-  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
+  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|Country)", sep = "")), data = dfMat)
   my.table_ts[i, 2] <- coefficients(summary(model.uni))[2, 1]
   my.table_ts[i, 3] <- coefficients(summary(model.uni))[2, 1] - 1.96 * coefficients(summary(model.uni))[2, 2]
   my.table_ts[i, 4] <- coefficients(summary(model.uni))[2, 1] + 1.96 * coefficients(summary(model.uni))[2, 2]
   # Multivariate model with one variable at a time (controlled by GDP & nb interventions)
-  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
+  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|Country)", sep = "")), data = dfMat)
   my.table_ts[i, 5] <- coefficients(summary(model.controlled))[5, 1]
   my.table_ts[i, 6] <- coefficients(summary(model.controlled))[5, 1] - 1.96 * coefficients(summary(model.controlled))[5, 2]
   my.table_ts[i, 7] <- coefficients(summary(model.controlled))[5, 1] + 1.96 * coefficients(summary(model.controlled))[5, 2]
 }
 my.table_ts <- as.data.frame(my.table_ts)
 colnames(my.table_ts) <- c("NPI", "diff.effect.uni", "low.ci.uni", "up.ci.uni", "diff.effect.control", "low.ci.control", "up.ci.control")
-my.table_ts$NPI <- colnames(matResults)[1:24]
+my.table_ts$NPI <- colnames(dfMat)[1:24]
 
 # Check most effective interventions
 my.table_ts[my.table_ts$diff.effect.control > 0.15 & my.table_ts$low.ci.control > 0, "NPI"]
@@ -184,3 +166,4 @@ changes.plot_ts_grouped
 jpeg("Figure 4.jpeg", units = "in", width = 14, height = 8, res = 300)
 grid.arrange(changes.plot_ts, changes.plot_ts_grouped, ncol = 2)
 dev.off()
+```

@@ -1,7 +1,11 @@
-#-------------------------------------------------
-# Summary of public health responses efficiencies
-#-------------------------------------------------
+---
+title: "Figure 1: Summary of public health responses"
+author: "Hugo Gruson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
 
+```{r}
 remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 
@@ -9,13 +13,18 @@ library(dplyr)
 library(purrr)
 library(tibble)
 library(ggplot2)
+```
 
+```{r}
 npi_europe <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
          stringsAsFactors = FALSE) %>%
   filter(Date <= "2020-09-08") %>%
   select(!any_of(c("NewCases", "NewDeaths", "Population", "Date")))
+```
 
 # Subfig A
+
+```{r}
 (
 duration_plot <- npi_europe %>%
   group_by(Country) %>%
@@ -35,10 +44,13 @@ duration_plot <- npi_europe %>%
          y = "",
          fill = "Median duration (days)")
 )
+```
 
-library(ggcorrplot)
 
 # Subfig B
+
+```{r}
+library(ggcorrplot)
 (
 correlation_plot <- npi_europe %>%
   select(-Country) %>%
@@ -50,12 +62,18 @@ correlation_plot <- npi_europe %>%
              ggtheme = theme_bw,
              legend.title = "Correlation")
 )
+```
 
 # Collage
+
+```{r}
 library(patchwork)
 
 duration_plot + correlation_plot +
   plot_annotation(tag_levels = "A") &
   theme(legend.position = "top")
+```
 
+```{r echo = FALSE, eval = FALSE}
 ggsave("Figure 1.pdf", width = 29.7, height = 21, units = "cm")
+```
