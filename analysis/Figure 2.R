@@ -1,4 +1,3 @@
-rm(list = ls())
 library(patchwork)
 library(dplyr)
 library(ggplot2)

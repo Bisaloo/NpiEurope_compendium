@@ -1,5 +1,3 @@
-rm(list=ls())
-
 remotes::install_github("Bisaloo/sir_age", upgrade = TRUE, force = TRUE)
 library(sirage)
 

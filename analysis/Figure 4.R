@@ -1,7 +1,6 @@
 #-------------------------------------------------
 # Summary of public health responses efficiencies
 #-------------------------------------------------
-rm(list = ls())
 library(ggplot2)
 library(hrbrthemes)
 library(corrplot)

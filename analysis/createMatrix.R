@@ -1,4 +1,3 @@
-rm(list = ls())
 library(ggplot2)
 
 remotes::install_github("Bisaloo/sir_age", upgrade = TRUE)
