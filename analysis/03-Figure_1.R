@@ -74,7 +74,7 @@ ii <- match(unique(country.implementation$NPI), colnames(dfMat)[1:24])
 dfMatcor <- dfMat[, ii]
 tabRes <- cor(dfMatcor)
 corplot <- ggcorrplot(tabRes,
-  hc.order = F,
+  hc.order = FALSE,
   type = "lower",
   method = "circle",
   colors = c("tomato2", "white", "springgreen3"),
