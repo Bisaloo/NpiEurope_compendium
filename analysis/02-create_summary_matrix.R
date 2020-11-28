@@ -16,12 +16,6 @@ resStrat <- c()
 
 folder <- "MCMCOK5"
 
-# From IMF, Wikipedia (except for liechentenstien, WB)
-gdp <- c(
-  50222, 45175, 9518, 14949, 27719, 23313, 59795, 23523, 48868, 41760, 46563,
-  19974, 17463, 67037, 77771, 32946, 18171, 173356, 19266, 113196, 30650,
-  52367, 77975, 14901, 23030, 12482, 19547, 26170, 29961, 51241, 83716, 41030
-)
 for (i in 1:length(countryVec)) {
   country <- countryVec[i]
   print(country)
@@ -76,18 +70,17 @@ for (i in 1:length(countryVec)) {
     temp[length(stratUn) + 2] <- res[j, 3]
     temp[length(stratUn) + 3] <- res[j, 4]
     temp[length(stratUn) + 4] <- gdp[i]
-    temp[length(stratUn) + 5] <- country
+    temp[length(stratUn) + 5] <- i
     temp[length(stratUn) + 6] <- length(tempNew)
     matResults <- rbind(matResults, temp)
   }
 }
 
-combStrat <- c()
-for (i in seq_len(nrow(matResults))) {
-  combStrat <- c(combStrat, sum(matResults[i, 1:24]))
-}
+matResults <- as.data.frame(matResults)
+
 colnames(matResults) <- c(stratUn, "Efficiency", "DayStart", "DayEnd", "GDP", "Country", "NbStrategies")
 
+matResults$Country <- countryVec[matResults$Country]
 matResults$duration <- matResults$DayEnd - matResults$DayStart
 
 save(matResults, file = "matResults.RData")
