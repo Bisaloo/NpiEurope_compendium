@@ -24,7 +24,6 @@ dfMat$country <- countryVec[ii]
 
 # Get duration of intervention
 dfMat$duration <- dfMat$DayEnd - dfMat$DayStart
-hist(dfMat$duration)
 
 # Prepare plot for number of countries and duration of intervention
 pos <- 0
@@ -64,32 +63,6 @@ country.duration.stats$NPI <- colnames(dfMat)[1:24]
 
 country.duration.stats_long <- gather(country.duration.stats, key = "stat", value = "value", low.whisk:up.whisk, factor_key = TRUE)
 colnames(country.duration.stats_long)[1] <- "NPI"
-
-#--------------------------
-# Create plot - Version 1
-#--------------------------
-library(tidyr)
-library(ggplot2)
-library(grid)
-library(gridExtra)
-
-implementation.plot <- ggplot(data = country.implementation, aes(x = implementation * 100, y = NPI)) +
-  geom_bar(stat = "identity") +
-  labs(x = "% Countries Implemented", y = "") +
-  theme(axis.text = element_text(size = 12), axis.title = element_text(size = 14, face = "bold"))
-implementation.plot
-
-duration.plot <- ggplot(subset(country.duration.stats_long, stat %in% c("Q1", "median", "Q3")), aes(x = value, y = NPI, colour = stat, group = NPI)) +
-  geom_line(colour = "black") +
-  geom_point(size = 4) +
-  scale_colour_manual(values = c("darkgrey", "black", "darkgrey")) +
-  labs(x = "Duration (days)", y = "") +
-  theme(
-    legend.position = "right", axis.text = element_text(size = 12), axis.text.y = element_blank(),
-    axis.title = element_text(size = 14, face = "bold")
-  )
-duration.plot
-grid.arrange(implementation.plot, duration.plot, ncol = 2)
 
 #--------------------------
 # Create plot - Version 2
@@ -136,8 +109,3 @@ corplot
 jpeg("Figure 1.jpeg", units = "px", width = 1100, height = 450)
 grid.arrange(implementation.plot, corplot, ncol = 2)
 dev.off()
-
-#-----------------------------------
-# Other information for the article
-#-----------------------------------
-length(which(dfMat$Efficiency > 0.66)) / length(dfMat$Efficiency)
