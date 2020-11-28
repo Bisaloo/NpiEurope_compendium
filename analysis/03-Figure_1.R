@@ -9,8 +9,7 @@ library(grid)
 library(gridExtra)
 
 load("matResults.RData")
-temp <- read.csv("inst/extdata/COVID_time_series_v4_2020-06-26.csv", stringsAsFactors = FALSE)
-countryVec <- sort(unique(temp$Country))
+
 dfMat <- data.frame(matResults)
 
 # Prepare plot for number of countries and duration of intervention
