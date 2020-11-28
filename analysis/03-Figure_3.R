@@ -10,8 +10,6 @@ library(gridExtra)
 load("matResults.RData")
 stratUn <- colnames(matResults)[1:26]
 
-dfMat <- data.frame(matResults)
-
 hist.plot <- ggplot(dfMat, aes(x = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_vline(xintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +

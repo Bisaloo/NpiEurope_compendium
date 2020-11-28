@@ -11,8 +11,6 @@ library(gridExtra)
 
 load("matResults.RData")
 
-dfMat <- data.frame(matResults)
-
 # Estimate difference of efficiency from previous strategy
 dfMat_ts <- dfMat
 pos <- 0

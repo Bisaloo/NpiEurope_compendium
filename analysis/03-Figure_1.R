@@ -10,8 +10,6 @@ library(gridExtra)
 
 load("matResults.RData")
 
-dfMat <- data.frame(matResults)
-
 # Prepare plot for number of countries and duration of intervention
 pos <- 0
 country.duration <- dfMat[, 1:24] * dfMat$duration
