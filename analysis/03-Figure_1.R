@@ -1,87 +1,58 @@
 #-------------------------------------------------
 # Summary of public health responses efficiencies
 #-------------------------------------------------
-library(ggplot2)
+
+remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
+library(NpiEurope)
+
 library(dplyr)
-library(tidyr)
+library(purrr)
+library(tibble)
+library(ggplot2)
+
+npi_europe <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
+         stringsAsFactors = FALSE) %>%
+  filter(Date <= "2020-09-08") %>%
+  select(!any_of(c("NewCases", "NewDeaths", "Population", "Date")))
+
+(
+duration_plot <- npi_europe %>%
+  group_by(Country) %>%
+  summarise(across(everything(), sum)) %>%
+  select(-Country) %>%
+  map_dfc(function(x) c(median(x[x != 0]), sum(x != 0))) %>%
+  t() %>%
+  as.data.frame() %>%
+  rownames_to_column("NPI") %>%
+  rename(Duration = V1,
+         Implemented = V2) %>%
+  mutate(Implemented = Implemented / 32 * 100) %>%
+  ggplot(aes(x = Implemented, y = NPI, fill = Duration)) +
+    geom_bar(stat = "identity") +
+    theme_bw() +
+    labs(x = "% Countries Implemented",
+         y = "",
+         fill = "Median duration (days)")
+)
+
 library(ggcorrplot)
-library(grid)
-library(gridExtra)
 
-dfMat <- readRDS("matResults.rds")
-
-# Prepare plot for number of countries and duration of intervention
-pos <- 0
-country.duration <- dfMat[, 1:26] * dfMat$duration
-country.duration.db <- array(NA, c(length(unique(dfMat$Country)), 26))
-country.implementation.db <- array(NA, c(length(unique(dfMat$Country)), 26))
-for (i in unique(dfMat$Country)) {
-  pos <- pos + 1
-  # Number of days implemented
-  my.db <- country.duration[dfMat$Country == i, ]
-  country.duration.db[pos, ] <- apply(my.db, 2, sum)
-  # Implementation or not
-  my.db2 <- dfMat[dfMat$Country == i, ]
-  country.implementation.db[pos, ] <- apply(my.db2[, 1:24], 2, function(x) {
-    ifelse(any(x) == 1, 1, 0)
-  })
-}
-country.duration.db <- as.data.frame(country.duration.db)
-colnames(country.duration.db) <- colnames(dfMat)[1:24]
-row.names(country.duration.db) <- unique(dfMat$Country)
-country.implementation.db <- as.data.frame(country.implementation.db)
-colnames(country.implementation.db) <- colnames(dfMat)[1:24]
-row.names(country.implementation.db) <- unique(dfMat$Country)
-
-# % countries implementing each NPI
-country.implementation <- apply(country.implementation.db, 2, sum) / length(unique(dfMat$Country))
-country.implementation <- data.frame(NPI = names(country.implementation), implementation = country.implementation, row.names = 1:24)
-# Estimate boxplot of NPI duration
-country.duration.stats <- array(NA, c(24, 5))
-for (i in 1:24) {
-  pos <- which(country.duration.db[, i] > 0)
-  country.duration.stats[i, ] <- boxplot(country.duration.db[pos, i], plot = F)$stats[, 1]
-}
-country.duration.stats <- as.data.frame(country.duration.stats)
-colnames(country.duration.stats) <- c("low.whisk", "Q1", "median", "Q3", "up.whisk")
-country.duration.stats$NPI <- colnames(dfMat)[1:24]
-
-country.duration.stats_long <- pivot_longer(country.duration.stats, low.whisk:up.whisk, names_to = "stat", values_to = "value")
-
-npi.group <- c(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1)
-# axis.col=factor(npi.group, labels=c('black','grey40','black','grey40','black'))
-axis.face <- factor(npi.group, labels = c("bold", "italic", "bold", "italic", "bold"))
-country.implementation$`Median duration (days)` <- country.duration.stats$median
-implementation.plot <- ggplot(data = country.implementation, aes(x = implementation * 100, y = NPI, fill = `Median duration (days)`)) +
-  geom_bar(stat = "identity") +
-  # scale_color_continuous()+
-  labs(x = "% Countries Implemented", y = "") +
-  theme_bw() +
-  theme(
-    plot.margin = margin(0.2, -1, 3, 0, "cm"), legend.position = c(0.8, 0.79), legend.background = element_blank(),
-    legend.box.background = element_rect(colour = "black"), axis.text = element_text(size = 12), axis.title = element_text(size = 12),
-    axis.text.y = element_text(face = as.character(axis.face))
-  )
-implementation.plot
-
-ii <- match(unique(country.implementation$NPI), colnames(dfMat)[1:24])
-dfMatcor <- dfMat[, ii]
-tabRes <- cor(dfMatcor)
-corplot <- ggcorrplot(tabRes,
-  hc.order = FALSE,
-  type = "lower",
-  method = "circle",
-  colors = c("tomato2", "white", "springgreen3"),
-  ggtheme = theme_bw, insig = "pch",
-  legend.title = "Correlation"
+(
+correlation_plot <- npi_europe %>%
+  select(-Country) %>%
+  relocate(sort(tidyselect::peek_vars())) %>%
+  cor() %>%
+  ggcorrplot(method = "circle", type = "upper",
+             hc.order = FALSE,
+             colors = c("tomato2", "white", "springgreen3"),
+             ggtheme = theme_bw,
+             legend.title = "Correlation")
 )
-corplot <- corplot + theme(
-  plot.margin = margin(0.9, 0, 0, 0, "cm"), legend.position = c(0.1, 0.79), legend.background = element_blank(),
-  legend.box.background = element_rect(colour = "black"), axis.text.y = element_blank(),
-  axis.text.x = element_text(face = as.character(axis.face)[2:24])
-)
-corplot
-# Save into a high resolution image (doesn't work by saving directly; I need to zoom, then print and change in GIMP)
-jpeg("Figure 1.jpeg", units = "px", width = 1100, height = 450)
-grid.arrange(implementation.plot, corplot, ncol = 2)
-dev.off()
+
+library(patchwork)
+
+duration_plot + correlation_plot +
+  plot_annotation(tag_levels = "A") &
+  theme(legend.position = "top")
+
+ggsave("Figure 1.pdf", width = 29.7, height = 21, units = "cm")
