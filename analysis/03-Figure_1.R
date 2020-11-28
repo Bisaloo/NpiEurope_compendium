@@ -11,11 +11,6 @@ library(gridExtra)
 load("matResults.RData")
 temp <- read.csv("inst/extdata/COVID_time_series_v4_2020-06-26.csv", stringsAsFactors = FALSE)
 countryVec <- sort(unique(temp$Country))
-gdp <- c(
-  50222, 45175, 9518, 14949, 27719, 23313, 59795, 23523, 48868, 41760, 46563,
-  19974, 17463, 67037, 77771, 32946, 18171, 173356, 19266, 113196, 30650,
-  52367, 77975, 14901, 23030, 12482, 19547, 26170, 29961, 51241, 83716, 41030
-)
 dfMat <- data.frame(matResults)
 
 # Get duration of intervention
