@@ -76,7 +76,7 @@ for (i in 1:length(countryVec)) {
     temp[length(stratUn) + 2] <- res[j, 3]
     temp[length(stratUn) + 3] <- res[j, 4]
     temp[length(stratUn) + 4] <- gdp[i]
-    temp[length(stratUn) + 5] <- i
+    temp[length(stratUn) + 5] <- country
     temp[length(stratUn) + 6] <- length(tempNew)
     matResults <- rbind(matResults, temp)
   }
@@ -86,5 +86,5 @@ combStrat <- c()
 for (i in seq_len(nrow(matResults))) {
   combStrat <- c(combStrat, sum(matResults[i, 1:24]))
 }
-colnames(matResults) <- c(stratUn, "Efficiency", "DayStart", "DayEnd", "GDP", "CountryCode", "NbStrategies")
+colnames(matResults) <- c(stratUn, "Efficiency", "DayStart", "DayEnd", "GDP", "Country", "NbStrategies")
 save(matResults, file = "matResults.RData")

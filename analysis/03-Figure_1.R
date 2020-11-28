@@ -18,38 +18,34 @@ gdp <- c(
 )
 dfMat <- data.frame(matResults)
 
-# Get country names
-ii <- match(dfMat$GDP, gdp)
-dfMat$country <- countryVec[ii]
-
 # Get duration of intervention
 dfMat$duration <- dfMat$DayEnd - dfMat$DayStart
 
 # Prepare plot for number of countries and duration of intervention
 pos <- 0
 country.duration <- dfMat[, 1:24] * dfMat$duration
-country.duration.db <- array(NA, c(length(unique(dfMat$country)), 24))
-country.implementation.db <- array(NA, c(length(unique(dfMat$country)), 24))
-for (i in unique(dfMat$country)) {
+country.duration.db <- array(NA, c(length(unique(dfMat$Country)), 24))
+country.implementation.db <- array(NA, c(length(unique(dfMat$Country)), 24))
+for (i in unique(dfMat$Country)) {
   pos <- pos + 1
   # Number of days implemented
-  my.db <- country.duration[dfMat$country == i, ]
+  my.db <- country.duration[dfMat$Country == i, ]
   country.duration.db[pos, ] <- apply(my.db, 2, sum)
   # Implementation or not
-  my.db2 <- dfMat[dfMat$country == i, ]
+  my.db2 <- dfMat[dfMat$Country == i, ]
   country.implementation.db[pos, ] <- apply(my.db2[, 1:24], 2, function(x) {
     ifelse(any(x) == 1, 1, 0)
   })
 }
 country.duration.db <- as.data.frame(country.duration.db)
 colnames(country.duration.db) <- colnames(dfMat)[1:24]
-row.names(country.duration.db) <- unique(dfMat$country)
+row.names(country.duration.db) <- unique(dfMat$Country)
 country.implementation.db <- as.data.frame(country.implementation.db)
 colnames(country.implementation.db) <- colnames(dfMat)[1:24]
-row.names(country.implementation.db) <- unique(dfMat$country)
+row.names(country.implementation.db) <- unique(dfMat$Country)
 
 # % countries implementing each NPI
-country.implementation <- apply(country.implementation.db, 2, sum) / length(unique(dfMat$country))
+country.implementation <- apply(country.implementation.db, 2, sum) / length(unique(dfMat$Country))
 country.implementation <- data.frame(NPI = names(country.implementation), implementation = country.implementation, row.names = 1:24)
 # Estimate boxplot of NPI duration
 country.duration.stats <- array(NA, c(24, 5))
