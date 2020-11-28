@@ -46,12 +46,12 @@ my.table_ts <- array(NA, c(24, 7))
 for (i in 1:24) {
   my.var <- colnames(dfMat_ts)[i]
   # Univariate model
-  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|country)", sep = "")), data = dfMat_ts)
+  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
   my.table_ts[i, 2] <- coefficients(summary(model.uni))[2, 1]
   my.table_ts[i, 3] <- coefficients(summary(model.uni))[2, 1] - 1.96 * coefficients(summary(model.uni))[2, 2]
   my.table_ts[i, 4] <- coefficients(summary(model.uni))[2, 1] + 1.96 * coefficients(summary(model.uni))[2, 2]
   # Multivariate model with one variable at a time (controlled by GDP & nb interventions)
-  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|country)", sep = "")), data = dfMat_ts)
+  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
   my.table_ts[i, 5] <- coefficients(summary(model.controlled))[5, 1]
   my.table_ts[i, 6] <- coefficients(summary(model.controlled))[5, 1] - 1.96 * coefficients(summary(model.controlled))[5, 2]
   my.table_ts[i, 7] <- coefficients(summary(model.controlled))[5, 1] + 1.96 * coefficients(summary(model.controlled))[5, 2]
@@ -143,12 +143,12 @@ my.table_ts <- array(NA, c(5, 7))
 for (i in 1:5) {
   my.var <- colnames(dfMat_ts)[i]
   # Univariate model
-  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|country)", sep = "")), data = dfMat_ts)
+  model.uni <- lmer(as.formula(paste("dif.efficiency~", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
   my.table_ts[i, 2] <- coefficients(summary(model.uni))[2, 1]
   my.table_ts[i, 3] <- coefficients(summary(model.uni))[2, 1] - 1.96 * coefficients(summary(model.uni))[2, 2]
   my.table_ts[i, 4] <- coefficients(summary(model.uni))[2, 1] + 1.96 * coefficients(summary(model.uni))[2, 2]
   # Multivariate model with one variable at a time (controlled by GDP & nb interventions)
-  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|country)", sep = "")), data = dfMat_ts)
+  model.controlled <- lmer(as.formula(paste("dif.efficiency~NbStrategies+GDP+duration+", my.var, "+(1|Country)", sep = "")), data = dfMat_ts)
   my.table_ts[i, 5] <- coefficients(summary(model.controlled))[5, 1]
   my.table_ts[i, 6] <- coefficients(summary(model.controlled))[5, 1] - 1.96 * coefficients(summary(model.controlled))[5, 2]
   my.table_ts[i, 7] <- coefficients(summary(model.controlled))[5, 1] + 1.96 * coefficients(summary(model.controlled))[5, 2]
@@ -158,7 +158,7 @@ colnames(my.table_ts) <- c("NPI", "diff.effect.uni", "low.ci.uni", "up.ci.uni", 
 my.table_ts$NPI <- colnames(dfMat_ts)[1:5]
 
 # Multivariate model
-model.multi <- lmer(dif.efficiency ~ NbStrategies + GDP + duration + StayHome + MassGather + Teleworking + ClosingSchools + Masks + (1 | country), data = dfMat_ts)
+model.multi <- lmer(dif.efficiency ~ NbStrategies + GDP + duration + StayHome + MassGather + Teleworking + ClosingSchools + Masks + (1 | Country), data = dfMat_ts)
 
 my.table_ts$diff.effect.multi <- coefficients(summary(model.multi))[5:9, 1]
 my.table_ts$low.ci.multi <- coefficients(summary(model.multi))[5:9, 1] - 1.96 * coefficients(summary(model.multi))[5:9, 2]
