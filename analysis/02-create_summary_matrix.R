@@ -83,4 +83,4 @@ colnames(matResults) <- c(stratUn, "Efficiency", "DayStart", "DayEnd", "GDP", "C
 matResults$Country <- countryVec[matResults$Country]
 matResults$duration <- matResults$DayEnd - matResults$DayStart
 
-save(matResults, file = "matResults.RData")
+saveRDS(matResults, "matResults.rds")

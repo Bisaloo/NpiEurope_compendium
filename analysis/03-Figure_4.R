@@ -9,7 +9,7 @@ library(lme4)
 library(dplyr)
 library(gridExtra)
 
-load("matResults.RData")
+dfMat <- readRDS("matResults.rds")
 
 # Estimate difference of efficiency from previous strategy
 dfMat_ts <- dfMat

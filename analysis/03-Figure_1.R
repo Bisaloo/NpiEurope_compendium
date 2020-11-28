@@ -8,13 +8,13 @@ library(ggcorrplot)
 library(grid)
 library(gridExtra)
 
-load("matResults.RData")
+dfMat <- readRDS("matResults.rds")
 
 # Prepare plot for number of countries and duration of intervention
 pos <- 0
-country.duration <- dfMat[, 1:24] * dfMat$duration
-country.duration.db <- array(NA, c(length(unique(dfMat$Country)), 24))
-country.implementation.db <- array(NA, c(length(unique(dfMat$Country)), 24))
+country.duration <- dfMat[, 1:26] * dfMat$duration
+country.duration.db <- array(NA, c(length(unique(dfMat$Country)), 26))
+country.implementation.db <- array(NA, c(length(unique(dfMat$Country)), 26))
 for (i in unique(dfMat$Country)) {
   pos <- pos + 1
   # Number of days implemented

@@ -7,8 +7,8 @@ library(corrplot)
 library(reshape)
 library(grid)
 library(gridExtra)
-load("matResults.RData")
-stratUn <- colnames(matResults)[1:26]
+dfMat <- readRDS("matResults.rds")
+stratUn <- colnames(dfMat)[1:26]
 
 hist.plot <- ggplot(dfMat, aes(x = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
