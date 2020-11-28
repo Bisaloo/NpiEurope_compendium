@@ -2,12 +2,12 @@
 # Summary of public health responses efficiencies
 #-------------------------------------------------
 library(ggplot2)
-library(hrbrthemes)
-library(corrplot)
-library(reshape)
-library(lme4)
 library(dplyr)
 library(tidyr)
+library(ggcorrplot)
+library(grid)
+library(gridExtra)
+
 load("matResults.RData")
 temp <- read.csv("inst/extdata/COVID_time_series_v4_2020-06-26.csv", stringsAsFactors = FALSE)
 countryVec <- sort(unique(temp$Country))
@@ -57,17 +57,8 @@ country.duration.stats <- as.data.frame(country.duration.stats)
 colnames(country.duration.stats) <- c("low.whisk", "Q1", "median", "Q3", "up.whisk")
 country.duration.stats$NPI <- colnames(dfMat)[1:24]
 
-country.duration.stats_long <- gather(country.duration.stats, key = "stat", value = "value", low.whisk:up.whisk, factor_key = TRUE)
-colnames(country.duration.stats_long)[1] <- "NPI"
+country.duration.stats_long <- pivot_longer(country.duration.stats, low.whisk:up.whisk, names_to = "stat", values_to = "value")
 
-#--------------------------
-# Create plot - Version 2
-#--------------------------
-library(tidyr)
-library(ggplot2)
-library(ggcorrplot)
-library(grid)
-library(gridExtra)
 npi.group <- c(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1)
 # axis.col=factor(npi.group, labels=c('black','grey40','black','grey40','black'))
 axis.face <- factor(npi.group, labels = c("bold", "italic", "bold", "italic", "bold"))
