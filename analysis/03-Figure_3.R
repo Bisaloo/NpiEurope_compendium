@@ -8,7 +8,7 @@ library(reshape)
 library(grid)
 library(gridExtra)
 load("matResults.RData")
-stratUn <- colnames(matResults)[1:24]
+stratUn <- colnames(matResults)[1:26]
 
 dfMat <- data.frame(matResults)
 
@@ -42,9 +42,9 @@ grid.arrange(hist.plot, correlation.plot, nrow = 2)
 dev.off()
 
 # Estimate effect by number of strategies
-my.table <- array(NA, c(24, 12))
-my.table.se <- array(NA, c(24, 12))
-for (i in 1:24) {
+my.table <- array(NA, c(26, 12))
+my.table.se <- array(NA, c(26, 12))
+for (i in 1:26) {
   my.var <- colnames(matResults)[i]
   for (j in 1:11) {
     # Univariate model
@@ -63,8 +63,8 @@ my.table <- as.data.frame(my.table)
 my.table.se <- as.data.frame(my.table.se)
 colnames(my.table) <- c("NPI", paste("effect.uni", 1:11, sep = "."))
 colnames(my.table.se) <- c("NPI", paste("stderror.uni", 1:11, sep = "."))
-my.table$NPI <- colnames(matResults)[1:24]
-my.table.se$NPI <- colnames(matResults)[1:24]
+my.table$NPI <- colnames(matResults)[1:26]
+my.table.se$NPI <- colnames(matResults)[1:26]
 
 library(tidyr)
 my.table_long <- gather(my.table, NbStrategies, efficiency, effect.uni.1:effect.uni.11, factor_key = TRUE)
@@ -120,7 +120,7 @@ for (i in 1:8) {
   # id1<-which( dfMat$Efficiency[dfMat$NbStrategies==i]>0.66)
   resNb <- rbind(resNb, matResults[id[id1], ])
 }
-tempDf <- melt(resNb[, 1:24], id.var = "indv")
+tempDf <- melt(resNb[, 1:26], id.var = "indv")
 tempDf$X1 <- tempDf$X1 + 3
 # Plot
 max.efficiency.plot <- ggplot(tempDf, aes(X1, X2)) +
