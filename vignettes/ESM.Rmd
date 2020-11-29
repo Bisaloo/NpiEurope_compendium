@@ -1,0 +1,72 @@
+---
+title: "Figure 1: Summary of public health responses"
+author: "Hugo Gruson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
+
+```{r}
+library(ggplot2)
+
+remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
+library(NpiEurope)
+
+library(dplyr)
+
+```
+
+```{r}
+library(asymptor)
+
+read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
+  stringsAsFactors = FALSE
+) %>%
+  transmute(
+    date = as.Date(Date), 
+    new_cases = NewCases, 
+    new_deaths = NewDeaths,
+    country = Country
+  ) %>%
+  group_by(country) %>%
+  summarise(estimate_asympto(cur_data()),
+            detected = new_cases) %>%
+  ggplot(aes(x = date), color = "red") +
+    geom_ribbon(aes(ymin = detected + lower, ymax = detected + upper)) +
+    geom_line(aes(y = detected)) +
+    facet_wrap(~ country, scales = "free")
+```
+
+
+```{r}
+for (i in 1:length(countryVec)) {
+  country <- countryVec[i]
+  print(country)
+  country_data <- load_country_data(country)
+  country_data$NewCases[which(country_data$NewCases < 0)] <- -country_data$NewCases[which(country_data$NewCases < 0)]
+  epi_data <- country_data[, c("Date", "NewCases", "NewDeaths")]
+  npi_data <- country_data[, !colnames(country_data) %in% c("NewCases", "NewDeaths", "Country", "Population")]
+  epi_data <- estimate_asympto(epi_data, smooth = 7)
+  contact_data <- NpiEurope::load_contact_data(country)
+  age_data <- load_age_data(country)
+
+  plot_asympto(epi_data)
+  ggsave(sprintf("%s/Report_%s.pdf", folder, country))
+  temp <- summarise_estimation(sprintf("%s/%s.csv", folder, country), npi_data, contact_data, age_data)
+  write.csv(temp, sprintf("%s/estim_%s.csv", folder, country))
+
+}
+```
+
+# Reproducibility information
+
+File created on `r Sys.Date()` with the following session details:
+
+<details>
+<summary>Session info</summary>
+
+```{r}
+sessionInfo()
+```
+
+</details>
+
