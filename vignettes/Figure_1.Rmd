@@ -77,3 +77,16 @@ duration_plot + correlation_plot +
 ```{r echo = FALSE, eval = FALSE}
 ggsave("Figure 1.pdf", width = 29.7, height = 21, units = "cm")
 ```
+
+# Reproducibility information
+
+File created on `r Sys.Date()` with the following session details:
+
+<details>
+<summary>Session info</summary>
+
+```{r}
+sessionInfo()
+```
+
+</details>

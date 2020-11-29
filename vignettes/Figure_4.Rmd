@@ -167,3 +167,15 @@ jpeg("Figure 4.jpeg", units = "in", width = 14, height = 8, res = 300)
 grid.arrange(changes.plot_ts, changes.plot_ts_grouped, ncol = 2)
 dev.off()
 ```
+
+# Reproducibility information
+
+File created on `r Sys.Date()` with the following session details:
+
+<details>
+<summary>Session info</summary>
+
+```{r}
+sessionInfo()
+```
+

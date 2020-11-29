@@ -95,3 +95,16 @@ p <- ggplot(temp, aes(x = NewCases, y = simulated, color = Country)) +
 wrap_plots(pGraph)
 ggsave("figure2.pdf", width = 11.69, height = 8.27)
 ```
+
+# Reproducibility information
+
+File created on `r Sys.Date()` with the following session details:
+
+<details>
+<summary>Session info</summary>
+
+```{r}
+sessionInfo()
+```
+
+</details>
