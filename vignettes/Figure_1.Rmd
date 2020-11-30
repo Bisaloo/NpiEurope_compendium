@@ -15,8 +15,7 @@ library(ggplot2)
 ```
 
 ```{r}
-npi_europe <- load_npi_data() %>%
-  select(-Date)
+npi_europe <- load_npi_data()
 ```
 
 # Subfig A
@@ -24,6 +23,7 @@ npi_europe <- load_npi_data() %>%
 ```{r}
 (
 duration_plot <- npi_europe %>%
+  select(-Date) %>%
   group_by(Country) %>%
   summarise(across(everything(), sum)) %>%
   select(-Country) %>%
@@ -50,7 +50,7 @@ duration_plot <- npi_europe %>%
 library(ggcorrplot)
 (
 correlation_plot <- npi_europe %>%
-  select(-Country) %>%
+  select(-Date, -Country) %>%
   relocate(sort(tidyselect::peek_vars())) %>%
   cor() %>%
   ggcorrplot(method = "circle", type = "upper",
