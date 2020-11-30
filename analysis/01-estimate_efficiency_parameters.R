@@ -1,7 +1,5 @@
-remotes::install_github("Bisaloo/sir_age", upgrade = TRUE, force = TRUE)
 library(sirage)
 
-remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 
 folder <- paste0("/scratch/gruson-", Sys.getenv("$SLURM_JOB_ID", Sys.Date()))

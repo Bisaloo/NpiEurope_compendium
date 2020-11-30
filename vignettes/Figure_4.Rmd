@@ -9,15 +9,49 @@ output: rmarkdown::html_document
 #-------------------------------------------------
 # Summary of public health responses efficiencies
 #-------------------------------------------------
-dfMat <- readRDS("matResults.rds")
+dfMat <- readRDS("../matResults.rds")
 
 library(dplyr)
+library(tidyr)
+library(lme4)
+library(ggplot2)
 
 dfMat <- dfMat %>%
   group_by(Country) %>%
   mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
          GDP = GDP / 1e4)
+```
 
+```{r}
+dfMat %>%
+  group_by(Country) %>%
+  mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
+         GDP = GDP / 1e4) %>%
+  select(-DayStart, -DayEnd, -Efficiency) %>%
+  pivot_longer(!c(Country, dif.efficiency, NbStrategies, GDP, duration), names_to = "NPI") %>%
+  group_by(NPI) %>%
+  # Univariate model
+  summarise(
+#    coeff = coefficients(summary(lmer(dif.efficiency ~ NbStrategies + GDP + duration + value + (1 | Country), data = cur_data())))[5, c(1, 2)],
+    coeff = coefficients(summary(lmer(dif.efficiency ~ value + (1 | Country), data = cur_data())))[2, c(1, 2)],
+    type = c("est", "sd")
+  ) %>%
+  pivot_wider(names_from = type, values_from = coeff) %>%
+  mutate(diff.effect.control = est,
+         low.ci.control = est - 1.96 * sd,
+         up.ci.control = est + 1.96 * sd,
+         .keep = "unused") %>%
+  mutate(Partial = grepl("Partial$", NPI),
+         NPI = gsub("Partial$", "", NPI)) %>%
+  ggplot(aes(x = diff.effect.control, y = NPI)) +
+  geom_vline(xintercept = 0, color = "darkred", size = 1, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = low.ci.control, xmax = up.ci.control)) +
+  geom_point() +
+  facet_wrap(~ Partial) +
+  labs(x = "Change in efficiency when adding each NPI", y = "")
+```
+
+```{r}
 #----------------------------------------------------------
 # Model change in efficiency per day from time series data
 #----------------------------------------------------------
@@ -43,30 +77,11 @@ my.table_ts$NPI <- colnames(dfMat)[1:24]
 # Check most effective interventions
 my.table_ts[my.table_ts$diff.effect.control > 0.15 & my.table_ts$low.ci.control > 0, "NPI"]
 my.table_ts[my.table_ts$diff.effect.control == max(my.table_ts$diff.effect.control), "NPI"]
+```
 
-#--------------------------------
-# Figure 4A - Univariate results
-#--------------------------------
-npi.group <- c(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 2, 2, 2, 2, 2, 1, 1)
-# axis.col=factor(npi.group, labels=c('black','grey40','black','grey40','black'))
-axis.face <- factor(npi.group, labels = c("bold", "italic", "bold", "italic", "bold"))
-
-changes.plot_ts <- ggplot(my.table_ts, aes(x = diff.effect.control, y = NPI)) +
-  geom_vline(xintercept = 0, color = "darkred", size = 1, linetype = "dashed") +
-  geom_errorbarh(aes(xmin = low.ci.control, xmax = up.ci.control)) +
-  geom_point(size = 3) +
-  labs(x = "Change in efficiency when adding each NPI", y = "") +
-  # facet_grid(variable~.) +
-  theme(
-    legend.position = "bottom", axis.text = element_text(size = 12),
-    axis.title = element_text(size = 14, face = "bold"),
-    axis.text.y = element_text(face = as.character(axis.face))
-  )
-changes.plot_ts
-
-#------------------------------
 # Figure 4B - Grouped Analysis
-#------------------------------
+
+```{r}
 # Group them into larger groups (select the appropriate NPI group according to what we want to include)
 npi.group <- c(1, 2, 3, 1, 4, 4, 4, 4, 2, 4, 5, 5, 4, 4, 5, 3, 4, 1, 4, 2, 4, 1, 5, 1) # Considering all interventions
 # npi.group=c(1,2,3,1,4,4,4,4,2,4,5,5,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA)    # Excluding interventions with partial implementation
@@ -179,3 +194,4 @@ File created on `r Sys.Date()` with the following session details:
 sessionInfo()
 ```
 
+</details>

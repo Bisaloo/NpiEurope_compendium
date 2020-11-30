@@ -6,13 +6,10 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
+library(dplyr)
 library(ggplot2)
 
-remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
-
-library(dplyr)
-
 ```
 
 ```{r}

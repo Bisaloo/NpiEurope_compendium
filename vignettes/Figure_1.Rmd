@@ -6,7 +6,6 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 
 library(dplyr)

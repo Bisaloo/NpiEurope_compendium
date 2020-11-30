@@ -1,9 +1,7 @@
 library(ggplot2)
 
-remotes::install_github("Bisaloo/sir_age", upgrade = TRUE)
 library(sirage)
 
-remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 
 temp <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-06-26.csv", package = "NpiEurope"),

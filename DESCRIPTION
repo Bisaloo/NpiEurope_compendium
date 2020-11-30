@@ -33,7 +33,6 @@ Depends:
     parallel,
     patchwork,
     purrr,
-    remotes,
     rmarkdown,
     sirage,
     tibble,

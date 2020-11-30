@@ -10,10 +10,8 @@ library(patchwork)
 library(dplyr)
 library(ggplot2)
 
-remotes::install_github("Bisaloo/sir_age", upgrade = TRUE)
 library(sirage)
 
-remotes::install_github("Bisaloo/Npieurope", upgrade = TRUE)
 library(NpiEurope)
 ```
 
