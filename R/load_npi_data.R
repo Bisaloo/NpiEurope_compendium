@@ -6,6 +6,15 @@ load_npi_data <- function(end_date = Sys.Date()) {
     mutate(across(c(date_start, date_end), as.Date)) %>%
     mutate(date_end = if_else(is.na(date_end), end_date, date_end))
 
+  holidays <- read.csv(system.file("extdata", "summer_holidays.csv", package = "NpiEurope")) %>%
+    transmute(Country = country,
+              date_start = as.Date(early_start),
+              date_end = as.Date(early_end)) %>%
+    merge(data.frame("Response_measure" = c("ClosDaycare", "ClosPrim", "ClosSec", "ClosHigh"))) %>%
+    relocate(Country, Response_measure, date_start, date_end)
+
+  npi_data <- rbind(npi_data, holidays)
+
   start_date <- min(npi_data$date_start, npi_data$date_start, na.rm = TRUE)
 
   skeleton <- merge(
