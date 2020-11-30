@@ -2,8 +2,6 @@
 #'
 #' @inheritParams load_country_data
 #'
-#' @importFrom readxl read_xlsx
-#'
 #' @export
 
 load_contact_data <- function(country) {
