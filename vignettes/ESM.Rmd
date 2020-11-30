@@ -15,9 +15,7 @@ library(NpiEurope)
 ```{r}
 library(asymptor)
 
-read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
-  stringsAsFactors = FALSE
-) %>%
+load_epi_data() %>%
   transmute(
     date = as.Date(Date), 
     new_cases = NewCases, 
@@ -25,12 +23,16 @@ read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package =
     country = Country
   ) %>%
   group_by(country) %>%
+  mutate(new_cases = pmax(new_cases, 0),
+         new_deaths = pmax(new_deaths, 0)) %>%
+  mutate(new_cases = slider::slide_dbl(new_cases, mean, .before = 3, .after = 3),
+         new_deaths = slider::slide_dbl(new_deaths, mean, .before = 3, .after = 3)) %>%
   summarise(estimate_asympto(cur_data()),
             detected = new_cases) %>%
-  ggplot(aes(x = date), color = "red") +
+  ggplot(aes(x = date)) +
     geom_ribbon(aes(ymin = detected + lower, ymax = detected + upper)) +
-    geom_line(aes(y = detected)) +
-    facet_wrap(~ country, scales = "free")
+    geom_line(aes(y = detected), color = "red") +
+    facet_wrap(~ country, scales = "free_y")
 ```
 
 
