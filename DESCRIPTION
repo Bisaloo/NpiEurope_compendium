@@ -29,6 +29,7 @@ Depends:
     ggcorrplot,
     ggplot2,
     lme4,
+    memoise,
     parallel,
     patchwork,
     purrr,
