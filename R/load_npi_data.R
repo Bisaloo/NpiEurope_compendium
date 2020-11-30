@@ -20,7 +20,8 @@ load_npi_data <- function(end_date = Sys.Date()) {
     summarise(in_use = any(in_use)) %>%
     pivot_wider(names_from = Response_measure, values_from = in_use) %>%
     mutate(across(!any_of(c("Country", "Date")), isTRUE)) %>%
-    mutate(across(!any_of(c("Country", "Date")), as.numeric))
+    mutate(across(!any_of(c("Country", "Date")), as.numeric)) %>%
+    ungroup()
 
   return(npi_data)
 }
