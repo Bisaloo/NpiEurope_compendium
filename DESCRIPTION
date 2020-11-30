@@ -29,7 +29,6 @@ Depends:
     ggcorrplot,
     ggplot2,
     lme4,
-    NpiEurope,
     parallel,
     patchwork,
     purrr,
@@ -39,10 +38,10 @@ Depends:
     tidyr,
     tidyselect
 Remotes: 
-    Bisaloo/Npieurope,
     Bisaloo/sir_age
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
 LazyData: true
 Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1.9000
