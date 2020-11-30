@@ -7,11 +7,20 @@
 #' @export
 
 load_contact_data <- function(country) {
-  contact_data <- read_xlsx(
-    system.file("extdata", "ctc.xlsx", package = "NpiEurope"),
-    col_names = FALSE,
-    sheet = country
-  )
 
-  return(contact_data)
+  if (country == "Norway") {
+    return(contactdata::contact_matrix("Sweden"))
+  }
+
+  if (country == "Liechtenstein") {
+    return(contactdata::contact_matrix("Luxembourg"))
+  }
+
+  if (country == "United Kingdom") {
+    return(contactdata::contact_matrix("UK"))
+  }
+
+  return(contactdata::contact_matrix(country))
+
+
 }
