@@ -15,10 +15,8 @@ library(ggplot2)
 ```
 
 ```{r}
-npi_europe <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
-         stringsAsFactors = FALSE) %>%
-  filter(Date <= "2020-09-08") %>%
-  select(!any_of(c("NewCases", "NewDeaths", "Population", "Date")))
+npi_europe <- load_npi_data() %>%
+  select(-Date)
 ```
 
 # Subfig A
