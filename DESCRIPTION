@@ -21,32 +21,27 @@ Authors@R: c(
 Description: Research Compendium for <doi:10.1101/2020.08.17.20174821>
 License: GPL-3
 Depends: 
-    corrplot,
+    asymptor,
+    contactdata,
     doParallel,
     dplyr,
     foreach,
     ggcorrplot,
     ggplot2,
-    grid,
-    gridExtra,
-    hrbrthemes,
     lme4,
-    mvtnorm,
     NpiEurope,
     parallel,
     patchwork,
-    readr,
-    readxl,
+    purrr,
     remotes,
-    reshape,
+    rmarkdown,
     sirage,
-    slider,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Remotes: 
     Bisaloo/Npieurope,
-    Bisaloo/sir_age,
-    tidyverse/ggplot2
+    Bisaloo/sir_age
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB
