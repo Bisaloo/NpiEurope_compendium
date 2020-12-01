@@ -1,3 +1,4 @@
+#' @export
 load_npi_data <- function(end_date = Sys.Date()) {
 
   end_date <- as.Date(end_date)

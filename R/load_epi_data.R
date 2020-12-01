@@ -1,3 +1,4 @@
+#' @export
 load_epi_data <- function(end_date = Sys.Date()) {
 
   read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv") %>%
