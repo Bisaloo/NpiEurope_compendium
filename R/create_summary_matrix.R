@@ -1,7 +1,7 @@
 #' @importFrom purrr map_dfr
 #'
 #' @export
-create_summary_matrix <- function(folder, date) {
+create_summary_matrix <- function(folder, date = Sys.Date()) {
 
   npi_europe <- load_npi_data(date)
 
