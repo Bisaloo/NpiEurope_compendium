@@ -6,10 +6,6 @@
 \usage{
 load_contact_data(country)
 }
-\arguments{
-\item{country}{Character string. Name of the country for which you want to
-run this analysis}
-}
 \description{
 Load contact dataset from specific country
 }
