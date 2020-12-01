@@ -11,6 +11,7 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 }
 
 #' @importFrom sirage summarise_estimation
+#' @importFrom tibble rownames_to_column
 create_summary_country <- function(file, npi_europe) {
 
   country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
