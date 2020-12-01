@@ -10,6 +10,7 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 
 }
 
+#' @importFrom sirage summarise_estimation
 create_summary_country <- function(file, npi_europe) {
 
   message(file)
