@@ -1,38 +1,67 @@
-library(sirage)
-
-library(NpiEurope)
-
-folder <- paste0("/scratch/gruson-", Sys.getenv("$SLURM_JOB_ID", Sys.Date()))
-dir.create(folder)
-setwd(folder)
-
-library(foreach)
 library(dplyr)
 
-cl <- parallel::makeForkCluster(4)
-doParallel::registerDoParallel(cl)
+library(sirage)
+library(NpiEurope)
 
-temp <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
-                 stringsAsFactors = FALSE)
-countryVec <- unique(temp$Country)
+folder <- paste0("MCMC_NpiEurope_", Sys.Date())
+dir.create(folder)
 
-foreach(country=countryVec) %dopar% {
+countries <- c("Austria",
+               "Belgium", "Bulgaria",
+               "Croatia", "Cyprus", "Czechia",
+               "Denmark",
+               "Estonia",
+               "Finland", "France",
+               "Germany", "Greece",
+               "Hungary",
+               "Iceland", "Ireland", "Italy",
+               "Latvia", "Lithuania", "Luxembourg",
+               "Malta",
+               "Netherlands", "Norway",
+               "Poland", "Portugal",
+               "Romania",
+               "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
+               "United Kingdom")
+
+library(foreach)
+library(doFuture)
+# To make sure this works fine on all machines, we don't force a parallelization
+# strategy here. The user should chose it either by running future::plan() or
+# by setting the R_FUTURE_PLAN env variable.
+
+registerDoFuture()
+
+foreach (country=countries) %dopar% {
 
   message(country)
 
-  country_data <- NpiEurope::load_country_data(country)
-  contact_data <- NpiEurope::load_contact_data(country)
+  contact_data <- load_contact_data(country)
   age_data <- load_age_data(country)
-  epi_data <- country_data[, c("Date", "NewCases", "NewDeaths")]
-  npi_data <- country_data[, !colnames(country_data) %in% c("NewCases", "NewDeaths", "Country", "Population")]
+  epi_data <- load_epi_data() %>%
+    filter(Country == country) %>%
+    select(-Country) %>%
+    transmute(
+      date = Date,
+      new_cases = NewCases,
+      new_deaths = NewDeaths
+    ) %>%
+    mutate(new_cases = pmax(new_cases, 0),
+           new_deaths = pmax(new_deaths, 0)) %>%
+    merge(asymptor::estimate_asympto(., bounds = "lower")) %>%
+    transmute(
+      Date = date,
+      NewCases = new_cases,
+      PropAsympto = lower / (lower+new_cases)
+    ) %>%
+    mutate(PropAsympto = ifelse(is.finite(PropAsympto), PropAsympto, 0)) %>%
+    mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 3, .after = 3, .complete = FALSE))
 
-  epi_data <- epi_data %>%
-    estimate_asympto(smooth = 5)
+  npi_data <- load_npi_data() %>%
+    filter(Country == country) %>%
+    select(-Country)
 
   res <- simulate_country(epi_data, npi_data, contact_data, age_data, task = "estimate",
-                          Np = 50, Niter = 5000, outfile = country)
-  saveRDS(res, sprintf("fullmcmc_%s.rds", country))
+                          Np = 10, Niter = 50, outfile = paste0(folder, "/", country))
+  saveRDS(res, sprintf("%s/fullmcmc_%s.rds", folder, country))
 
 }
-
-parallel::stopCluster(cl)
