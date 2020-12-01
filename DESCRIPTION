@@ -39,6 +39,7 @@ Suggests:
     parallel,
     patchwork,
     rmarkdown,
+    slider,
     tidyselect
 Remotes: 
     Bisaloo/sir_age
