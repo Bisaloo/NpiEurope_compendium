@@ -3,7 +3,7 @@ library(dplyr)
 library(sirage)
 library(NpiEurope)
 
-folder <- paste0("MCMC_NpiEurope_", Sys.Date())
+folder <- "MCMC_NpiEurope"
 dir.create(folder)
 
 countries <- c("Austria",
