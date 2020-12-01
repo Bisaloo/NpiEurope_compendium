@@ -36,24 +36,25 @@ load_epi_data() %>%
 ```
 
 
-```{r}
-for (i in 1:length(countryVec)) {
-  country <- countryVec[i]
-  print(country)
-  country_data <- load_country_data(country)
-  country_data$NewCases[which(country_data$NewCases < 0)] <- -country_data$NewCases[which(country_data$NewCases < 0)]
-  epi_data <- country_data[, c("Date", "NewCases", "NewDeaths")]
-  npi_data <- country_data[, !colnames(country_data) %in% c("NewCases", "NewDeaths", "Country", "Population")]
-  epi_data <- estimate_asympto(epi_data, smooth = 7)
-  contact_data <- NpiEurope::load_contact_data(country)
-  age_data <- load_age_data(country)
+```{r, results='asis'}
+npi_europe <- load_npi_data()
 
-  plot_asympto(epi_data)
-  ggsave(sprintf("%s/Report_%s.pdf", folder, country))
-  temp <- summarise_estimation(sprintf("%s/%s.csv", folder, country), npi_data, contact_data, age_data)
-  write.csv(temp, sprintf("%s/estim_%s.csv", folder, country))
+list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
+  lapply(function(f) {
+      country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
 
-}
+      npi_country <- npi_europe %>%
+        filter(Country == country) %>%
+        select(-Country)
+    
+      contact_country <- load_contact_data(country)
+      age_country <- sirage::load_age_data(country)
+    
+      res <- sirage::summarise_estimation(f, npi_country, contact_country, age_country)
+      
+      cat("### ", country, "\n\n")
+      print(knitr::kable(res))
+  })
 ```
 
 # Reproducibility information
