@@ -4,5 +4,8 @@
   load_npi_data <<- memoise::memoise(load_npi_data)
   load_epi_data <<- memoise::memoise(load_epi_data)
 
+  # Memoise slow function
+  create_summary_matrix <<- memoise::memoise(create_summary_matrix)
+
 }
 
