@@ -13,14 +13,14 @@ library(tibble)
 ```
 
 ```{r}
-dfMat <- readRDS("../matResults.rds")
+efficency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
 ```
 
 # Subfig A
 
 ```{r}
 (
-hist_plot <- ggplot(dfMat, aes(y = Efficiency)) +
+hist_plot <- ggplot(efficency_matrix, aes(y = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
   labs(x = "Public Health Responses")
@@ -29,7 +29,7 @@ hist_plot <- ggplot(dfMat, aes(y = Efficiency)) +
 
 ```{r}
 (
-number_efficiency_plot <- ggplot(dfMat, aes(x = NbStrategies, y = Efficiency)) +
+number_efficiency_plot <- ggplot(efficency_matrix, aes(x = NbStrategies, y = Efficiency)) +
   geom_point() +
   geom_smooth(method = "lm") +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
@@ -42,8 +42,8 @@ number_efficiency_plot <- ggplot(dfMat, aes(x = NbStrategies, y = Efficiency)) +
 
 ```{r}
 (
-efficiency_uni_plot <- dfMat %>%
-  select(-DayStart, -DayEnd, -GDP, -Country, -duration) %>%
+efficiency_uni_plot <- efficency_matrix %>%
+  select(-DayStart, -DayEnd, -Country, -duration) %>%
   pivot_longer(!c(Efficiency, NbStrategies), names_to = "NPI") %>%
   group_by(NbStrategies, NPI) %>%
   summarise(coeff = coefficients(lm(Efficiency ~ value, data = cur_data()))[2]) %>%
@@ -61,7 +61,7 @@ efficiency_uni_plot <- dfMat %>%
 
 ````{r}
 (
-max_efficiency_plot <- dfMat %>%
+max_efficiency_plot <- efficency_matrix %>%
   arrange(NbStrategies) %>%
   group_by(NbStrategies) %>%
   filter(Efficiency == max(Efficiency)) %>%
