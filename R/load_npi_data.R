@@ -1,3 +1,7 @@
+#' @importFrom utils read.csv
+#' @importFrom dplyr %>% mutate across if_else transmute relocate group_by summarise ungroup filter any_of
+#' @importFrom tidyr pivot_wider
+#'
 #' @export
 load_npi_data <- function(end_date = Sys.Date()) {
 

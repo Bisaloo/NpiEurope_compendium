@@ -16,10 +16,7 @@ library(NpiEurope)
 ```
 
 ```{r}
-temp <- read.csv(system.file("extdata", "COVID_time_series_v4_2020-09-16.csv", package = "NpiEurope"),
-  stringsAsFactors = FALSE
-) %>%
-  filter(Date <= "2020-09-08")
+temp <- load_npi_data()
 
 countryVec <- sort(unique(temp$Country))
 

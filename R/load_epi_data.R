@@ -1,3 +1,6 @@
+#' @importFrom utils read.csv
+#' @importFrom dplyr %>% filter transmute
+#'
 #' @export
 load_epi_data <- function(end_date = Sys.Date()) {
 

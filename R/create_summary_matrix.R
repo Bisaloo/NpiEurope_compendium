@@ -1,4 +1,5 @@
 #' @importFrom purrr map_dfr
+#' @importFrom dplyr %>%
 #'
 #' @export
 create_summary_matrix <- function(folder, date = Sys.Date()) {
@@ -10,8 +11,10 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 
 }
 
-#' @importFrom sirage summarise_estimation
+#' @importFrom sirage summarise_estimation load_age_data
 #' @importFrom tibble rownames_to_column
+#' @importFrom dplyr %>% filter select mutate rowwise across c_across any_of
+#' @importFrom stats setNames
 create_summary_country <- function(file, npi_europe) {
 
   country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
@@ -21,7 +24,7 @@ create_summary_country <- function(file, npi_europe) {
     select(-Country)
 
   contact_country <- load_contact_data(country)
-  age_country <- sirage::load_age_data(country)
+  age_country <- load_age_data(country)
 
   s <- summarise_estimation(file, npi_country, contact_country, age_country)[-1, ] %>%
     rownames_to_column("strats")

@@ -20,23 +20,24 @@ Authors@R: c(
     )
 Description: Research Compendium for <doi:10.1101/2020.08.17.20174821>
 License: GPL-3
-Depends: 
-    asymptor,
+Imports: 
     contactdata,
-    doParallel,
     dplyr,
+    memoise,
+    purrr,
+    sirage,
+    tibble,
+    tidyr
+Suggests:
+    asymptor,
+    doFuture,
     foreach,
     ggcorrplot,
     ggplot2,
     lme4,
-    memoise,
     parallel,
     patchwork,
-    purrr,
     rmarkdown,
-    sirage,
-    tibble,
-    tidyr,
     tidyselect
 Remotes: 
     Bisaloo/sir_age
