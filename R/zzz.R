@@ -9,8 +9,7 @@
 
   # Fix warnings due to non-standard evaluation
   utils::globalVariables(
-    c("Country", "cur_column", "strats", "NbStrategies",
-      "X2.5.", "X97.5.", "start", "end")
+    c("Country", "strats", "NbStrategies", "X2.5.", "X97.5.", "start", "end")
   )
 
 }
