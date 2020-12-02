@@ -18,7 +18,7 @@ the different age classes for a given country.
 Get contact data matrix for a specific country
 }
 \examples{
-oad_contact_data("France")
+load_contact_data("France")
 
 }
 \references{

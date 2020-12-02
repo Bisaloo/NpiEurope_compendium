@@ -3,7 +3,7 @@
 #' @importFrom contactdata contact_matrix
 #'
 #' @examples
-#' oad_contact_data("France")
+#' load_contact_data("France")
 #'
 #' @export
 
