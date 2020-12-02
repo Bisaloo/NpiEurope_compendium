@@ -25,6 +25,7 @@ load_epi_data <- function(end_date = Sys.Date()) {
                           "Poland", "Portugal",
                           "Romania",
                           "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
-                          "United Kingdom"))
+                          "United_Kingdom")) %>%
+    mutate(Country = if_else(Country == "United_Kingdom", "United Kingdom", Country))
 
 }
