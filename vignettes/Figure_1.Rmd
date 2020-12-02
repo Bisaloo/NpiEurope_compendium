@@ -6,15 +6,16 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-library(NpiEurope)
-
-library(dplyr)
-library(purrr)
-library(tibble)
-library(ggplot2)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(purrr)
+  library(tibble)
+  library(ggplot2)
+})
 ```
 
 ```{r}
+library(NpiEurope)
 npi_europe <- load_npi_data()
 ```
 

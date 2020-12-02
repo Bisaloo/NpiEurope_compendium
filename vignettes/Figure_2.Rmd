@@ -6,9 +6,11 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(purrr)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(ggplot2)
+  library(purrr)
+})
 ```
 
 ```{r}

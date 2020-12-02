@@ -6,16 +6,22 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-library(dplyr)
-library(ggplot2)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(ggplot2)
+}
+```
 
+```{r}
 library(NpiEurope)
+epi_europe <- load_epi_data()
+npi_europe <- load_npi_data()
 ```
 
 ```{r}
 library(asymptor)
 
-load_epi_data() %>%
+epi_europe %>%
   transmute(
     date = as.Date(Date), 
     new_cases = NewCases, 
@@ -37,8 +43,6 @@ load_epi_data() %>%
 
 
 ```{r, results='asis'}
-npi_europe <- load_npi_data()
-
 list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
   lapply(function(f) {
       country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)

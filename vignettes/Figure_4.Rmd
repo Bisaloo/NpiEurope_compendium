@@ -6,10 +6,12 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-library(dplyr)
-library(tidyr)
-library(lme4)
-library(ggplot2)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(tidyr)
+  library(lme4)
+  library(ggplot2)
+})
 ```
 
 ```{r}
