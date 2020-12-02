@@ -9,7 +9,7 @@ output: rmarkdown::html_document
 suppressPackageStartupMessages({
   library(dplyr)
   library(ggplot2)
-}
+})
 ```
 
 ```{r}
