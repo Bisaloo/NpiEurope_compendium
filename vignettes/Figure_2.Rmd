@@ -6,89 +6,78 @@ output: rmarkdown::html_document
 ---
 
 ```{r}
-library(patchwork)
 library(dplyr)
 library(ggplot2)
-
-library(sirage)
-
-library(NpiEurope)
+library(purrr)
 ```
 
 ```{r}
-temp <- load_npi_data()
+library(NpiEurope)
+npi_europe <- load_npi_data()
+epi_europe <- load_epi_data()
+```
 
-countryVec <- sort(unique(temp$Country))
+```{r}
+simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
+  
+  country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
+  
+  message(country)
 
-temp <- temp %>%
-  group_by(Country) %>%
-  mutate(
-    cum_cases = cumsum(NewCases),
-    simulated = NA_real_
+  npi_country <- npi_europe %>%
+    filter(Country == country) %>%
+    select(-Country)
+  
+  epi_country <- epi_europe %>%
+    filter(Country == country) %>%
+    select(-Country) %>%
+    transmute(
+      date = Date,
+      new_cases = NewCases,
+      new_deaths = NewDeaths
+    ) %>%
+    mutate(new_cases = pmax(new_cases, 0),
+           new_deaths = pmax(new_deaths, 0)) %>%
+    merge(asymptor::estimate_asympto(., bounds = "lower")) %>%
+    transmute(
+      Date = date,
+      NewCases = new_cases,
+      PropAsympto = lower / (lower+new_cases)
+    ) %>%
+    mutate(PropAsympto = ifelse(is.finite(PropAsympto), PropAsympto, 0)) %>%
+    mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 3, .after = 3, .complete = FALSE))
+
+  contact_country <- load_contact_data(country)
+  age_country <- sirage::load_age_data(country)
+
+  sims <- sirage::simulate_trajectory(
+    file,
+    epi_country, npi_country, contact_country, age_country,
+    Npost = 10
   )
-
-folder <- "MCMCOK5"
-
-pGraph <- list()
-for (i in 1:length(countryVec)) {
-  country <- countryVec[i]
-  print(country)
-  country_data <- NpiEurope::load_country_data(country)
-  country_data$NewCases[which(country_data$NewCases < 0)] <- -country_data$NewCases[which(country_data$NewCases < 0)]
-  epi_data <- country_data[, c("Date", "NewCases", "NewDeaths")]
-  npi_data <- country_data[, !colnames(country_data) %in% c("NewCases", "NewDeaths", "Country", "Population")]
-  epi_data <- estimate_asympto(epi_data, smooth = 7)
-
-  contact_data <- NpiEurope::load_contact_data(country)
-  age_data <- load_age_data(country)
-
-  plot_asympto(epi_data)
-  ggsave(sprintf("%s/Report_%s.pdf", folder, country))
-
-  res <- read.csv(sprintf("%s/%s.csv", folder, country))
-
-  plot_MCMC(sprintf("%s/%s.csv", folder, country))
-  ggsave(sprintf("%s/mcmc_%s.pdf", folder, country))
-
-  write.csv(
-    summarise_estimation(sprintf("%s/%s.csv", folder, country), npi_data, contact_data, age_data),
-    sprintf("%s/estim_%s.csv", folder, country)
-  )
-  # knitr::kable(summarise_estimation(sprintf("MCMCNew/MCMC_%s.csv",country), country_data))
-
-  sims <- simulate_trajectory(sprintf("%s/%s.csv", folder, country),
-    epi_data, npi_data, contact_data, age_data,
-    Npost = 5
-  )
-
-  sims <- t(do.call(rbind, sims))
-  temp$simulated[temp$Country == country & !is.na(temp$cum_cases) & temp$cum_cases > 0] <- apply(sims, MARGIN = 2, median)
-
-  tempG <- plot_simulations(sims, country_data) + ggtitle(country)
-  pGraph[[length(pGraph) + 1]] <- tempG
-  ggsave(sprintf("%s/sim_%s.pdf", folder, country))
+  
+  sims <- as.data.frame(do.call(rbind, sims))
+  sims$Date <- as.Date(intersect(npi_country$Date, epi_country$Date), origin = "1970-01-01")
+  sims$Country <- country
+  
+  sims <- merge(sims, epi_country)
+  
+  return(sims)
+  
 }
+```
 
-p <- ggplot(temp, aes(x = NewCases, y = simulated, color = Country)) +
-  geom_point() +
-  scale_x_continuous(trans = "log10") +
-  scale_y_continuous(trans = "log10") +
-  geom_abline(slope = 1, col = "black", linetype = "dashed") +
-  xlab("Observed cases") +
-  ylab("Simulated cases") +
-  theme_minimal()
-
-# pGraph[[length(pGraph) + 1]] <- p
-#
-# layout <- mapply(area, t = c(rep(1:4, each = 6), rep(5:6, each = 4)), l = c(rep(1:6, times = 4), rep(1:4, times = 2)), SIMPLIFY = FALSE)
-# layout <- do.call(patchwork:::c.patch_area, layout)
-#
-# layout <- c(layout, area(5,5,6,6))
-#
-# wrap_plots(pGraph, design = layout)
-
-wrap_plots(pGraph)
-ggsave("figure2.pdf", width = 11.69, height = 8.27)
+```{r}
+list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
+  map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
+  rowwise() %>%
+  mutate(sims_low = quantile(c_across(V1:V20), probs = 0.05),
+         sims_high = quantile(c_across(V1:V20), probs = 0.95),
+         .keep = "unused") %>%
+  ggplot(aes(x = Date)) +
+    geom_ribbon(aes(ymin = sims_low, ymax = sims_high)) +
+    geom_line(aes(y = NewCases), col = "red") +
+    facet_wrap(~ Country, scales = "free_y")
 ```
 
 # Reproducibility information
