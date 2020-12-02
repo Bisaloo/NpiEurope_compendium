@@ -1,0 +1,35 @@
+url: https://bisaloo.github.io/NpiEurope_compendium
+
+template:
+  params:
+    bootswatch: flatly
+  opengraph:
+    twitter:
+      creator: "@grusonh"
+      card: summary_large_image
+
+authors:
+  Hugo Gruson:
+    href: https://www.normalesup.org/~hgruson/
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Reference
+      href: reference/index.html
+    - text: Figures
+      href: articles/index.html
+      menu:
+        - text: Figure 1
+          href: articles/Figure_1.html
+        - text: Figure 2
+          href: articles/Figure_2.html
+        - text: Figure 3
+          href: articles/Figure_3.html
+        - text: Figure 4
+          href: articles/Figure_4.html
+        - text: ESM
+          href: articles/SI.html
+    - text: Article
+      href: https://doi.org/10.1101/2020.08.17.20174821
