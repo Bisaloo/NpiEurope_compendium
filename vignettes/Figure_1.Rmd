@@ -1,5 +1,5 @@
 ---
-title: "Figure 1: Summary of public health responses"
+title: "Figure 1: Description of public health responses"
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document

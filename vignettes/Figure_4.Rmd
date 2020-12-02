@@ -1,5 +1,5 @@
 ---
-title: "Figure 1: Summary of public health responses"
+title: "Figure 4: Efficiency changes after addition of a new strategy"
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document

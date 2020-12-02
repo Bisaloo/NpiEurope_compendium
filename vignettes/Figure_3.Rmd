@@ -1,5 +1,5 @@
 ---
-title: "Figure 1: Summary of public health responses"
+title: "Figure 3: Efficiency of different NPIs"
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document

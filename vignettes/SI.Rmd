@@ -1,5 +1,5 @@
 ---
-title: "Figure 1: Summary of public health responses"
+title: "ESM: report rate and efficiencies for each country"
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document
