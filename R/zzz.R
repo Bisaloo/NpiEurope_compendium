@@ -8,9 +8,9 @@
   create_summary_matrix <<- memoise::memoise(create_summary_matrix)
 
   # Fix warnings due to non-standard evaluation
-  utils::globalVariables(
-    c("Country", "strats", "NbStrategies", "X2.5.", "X97.5.", "start", "end")
-  )
+  # utils::globalVariables(
+  #   c("Country", "strats", "NbStrategies", "X2.5.", "X97.5.", "start", "end")
+  # )
 
 }
 
