@@ -22,8 +22,6 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
   
   country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
   
-  message(country)
-
   npi_country <- npi_europe %>%
     filter(Country == country) %>%
     select(-Country)
