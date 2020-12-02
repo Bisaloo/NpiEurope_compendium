@@ -3,12 +3,12 @@ Package: NpiEurope
 Title: Research Compendium for Garchitorena et al. (2020)
 Version: 0.1
 Authors@R: c(
-    person(given = "Andres", family = "Garchitorena",
-           role = "aut"),
     person(given = "Hugo", family = "Gruson",
            role = c("aut", "cre"),
            email = "hugo.gruson+R@normalesup.org",
            comment = c(ORCID = "0000-0002-4094-1476")),
+    person(given = "Andres", family = "Garchitorena",
+           role = "aut"),
     person(given = "Bernard", family = "Cazelles",
            role = "aut"),
     person(given = "Tommi", family = "Karki",
