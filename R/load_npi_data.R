@@ -1,3 +1,8 @@
+#' Get epidemiological data for 31 European countries
+#'
+#' @param end_date The latest date taken into account. (Taken as the end date
+#' for strategies where no end has been registered.)
+#'
 #' @importFrom utils read.csv
 #' @importFrom dplyr %>% mutate across if_else transmute relocate group_by summarise ungroup filter any_of
 #' @importFrom tidyr pivot_wider

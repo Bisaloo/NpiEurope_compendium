@@ -1,4 +1,9 @@
+#' @inherit contactdata::contact_matrix
+#'
 #' @importFrom contactdata contact_matrix
+#'
+#' @examples
+#' oad_contact_data("France")
 #'
 #' @export
 

@@ -1,8 +1,13 @@
+#' Get epidemiological data for 31 European countries
+#'
+#' @references
+#' https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide
+#'
 #' @importFrom utils read.csv
 #' @importFrom dplyr %>% filter transmute
 #'
 #' @export
-load_epi_data <- function(end_date = Sys.Date()) {
+load_epi_data <- function() {
 
   read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv") %>%
     filter(continentExp == "Europe") %>%

@@ -1,3 +1,8 @@
+#' Create summary matrix of NPI efficiency
+#'
+#' @param folder The folder containing the result of the MCMC run
+#' @inheritParams load_npi_data
+#'
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr %>%
 #'
