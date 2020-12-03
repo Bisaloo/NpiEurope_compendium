@@ -26,11 +26,18 @@ efficiency_matrix %>%
   mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
          GDP = GDP / 1e4) %>%
   select(-DayStart, -DayEnd, -Efficiency) %>%
-  pivot_longer(!c(Country, dif.efficiency, NbStrategies, duration), names_to = "NPI") %>%
+  pivot_longer(!c(Country, dif.efficiency, NbStrategies, duration, GDP), names_to = "NPI") %>%
   group_by(NPI) %>%
   # Univariate model
   summarise(
-    coeff = coefficients(summary(lmer(dif.efficiency ~ NbStrategies + GDP + duration + value + (1 | Country), data = cur_data())))[5, c(1, 2)],
+    coeff = tryCatch(
+      coefficients(
+        summary(
+          lmer(dif.efficiency ~ NbStrategies + GDP + duration + value + (1 | Country), data = cur_data())
+          )
+        )[5, c(1, 2)],
+      error = function(e) NA
+    ),
     type = c("est", "sd")
   ) %>%
   pivot_wider(names_from = type, values_from = coeff) %>%
