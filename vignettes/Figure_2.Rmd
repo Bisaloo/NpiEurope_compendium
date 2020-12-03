@@ -1,5 +1,5 @@
 ---
-title: "Figure 2: Comparison of simulations and observed cases"
+title: "Figure 2: Model fit of COVID-19 incidence across European countries."
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document
@@ -12,6 +12,8 @@ suppressPackageStartupMessages({
   library(purrr)
 })
 ```
+
+Despite large variability in terms of public health responses and sociocultural backgrounds across Europe, we were able to accurately quantify viral transmission rates over time in each country before and after implementation of public health responses, reproducing the observed national epidemiological dynamics.
 
 ```{r}
 library(NpiEurope)
@@ -67,7 +69,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
 }
 ```
 
-```{r, fig.height=15}
+```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}
 list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
   rowwise() %>%
@@ -79,7 +81,6 @@ list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
     geom_line(aes(y = NewCases), col = "red") +
     facet_wrap(~ Country, scales = "free_y", ncol = 3)
 ```
-
 # Reproducibility information
 
 File created on `r Sys.Date()` with the following session details:

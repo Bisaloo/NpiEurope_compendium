@@ -1,5 +1,5 @@
 ---
-title: "Figure 4: Efficiency changes after addition of a new strategy"
+title: "Figure 4: Additional PHR efficiency gained with NPIs implemented against COVID-19 in Europe."
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document
@@ -14,11 +14,13 @@ suppressPackageStartupMessages({
 })
 ```
 
+Importantly, these efficiencies were estimated for countries with very different socio-cultural and economic backgrounds, NPIs were implemented for different lengths of time, and there was substantial overlap between them. To address this, we estimated the change in response efficiency over time when adding or removing a particular NPI, while controlling for GDP, number of NPIs, length of implementation, and country of implementation. We show that adding stay at home recommendations for risk groups to the PHR resulted in the largest increase in efficiency (β=0.24, 95%CI 0.16-0.32) followed by teleworking (β=0.23, 95%CI 0.15-0.31). Partial relaxation of these NPIs resulted in significantly lower than average response efficiency. In addition, enforced stay at home orders for the general population, bans to gatherings of over 50 people, and closures of non-essential businesses or services all resulted in significant increases in efficiency over 15%. Less constraining versions of these NPIs, such as limiting mass gatherings to less than 1000 people or non-enforced stay at home recommendations for the general populations led to smaller increases in PHR efficiency. Closure of universities and higher education establishments had a larger effect (β=0.23, 95%CI 0.06-0.22) than the closure of schools at secondary, primary or preschool levels. Recommendations for the use of protective masks, whether on a voluntary or mandatory basis, were the only NPIs that did not result in significant improvements in PHR efficiency. In contrast with teleworking and stay at home recommendations for risk groups, partial relaxation of all other NPIs resulted in non-significant changes in PHR efficiency.
+
 ```{r}
 efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
 ```
 
-```{r}
+```{r, fig.cap='Results show the change in PHR efficiency over time when adding each of the 13 NPIs (mean adjusted effect and 95% confidence intervals in multivariate models). Results are disaggregated by level of implementation.'}
 efficiency_matrix %>%
   group_by(Country) %>%
   mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0)) %>%
@@ -27,8 +29,7 @@ efficiency_matrix %>%
   group_by(NPI) %>%
   # Univariate model
   summarise(
-#    coeff = coefficients(summary(lmer(dif.efficiency ~ NbStrategies + GDP + duration + value + (1 | Country), data = cur_data())))[5, c(1, 2)],
-    coeff = coefficients(summary(lmer(dif.efficiency ~ value + (1 | Country), data = cur_data())))[2, c(1, 2)],
+    coeff = coefficients(summary(lmer(dif.efficiency ~ NbStrategies + GDP + duration + value + (1 | Country), data = cur_data())))[5, c(1, 2)],
     type = c("est", "sd")
   ) %>%
   pivot_wider(names_from = type, values_from = coeff) %>%

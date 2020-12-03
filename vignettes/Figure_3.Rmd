@@ -1,5 +1,5 @@
 ---
-title: "Figure 3: Efficiency of different NPIs"
+title: "Figure 3: Efficiency of PHRs and NPIs implemented against COVID-19 in Europe."
 author: "Hugo Gruson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_document
@@ -20,16 +20,15 @@ efficency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
 
 # Subfig A
 
-```{r}
+Overall, the combination of NPIs implemented as part of PHRs across Europe had a high efficiency at reducing transmission rates, with a median reduction of 71% and an interquartile range of 58-81%. With an estimated basic reproduction number R0 of about 3, standard epidemiological models of COVID-19 suggest that to decrease the effective reproductive ratio below 1, transmission rates need to be reduced by at least 66%. According to this, nearly two thirds of the PHRs evaluated could be part of a "suppression strategy", and many others could be part of mitigation efforts. Efficiency was positively associated with the number of NPIs implemented as part of the PHR.
+
+```{r, fig.cap='Efficiency of PHRs, which has a positive correlation with the number of NPIs implemented simultaneously. Reductions in transmission above 66% (red dashed line) can achieve suppression given a R0 of 3.', fig.show='hold'}
 (
 hist_plot <- ggplot(efficency_matrix, aes(y = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
   labs(x = "Public Health Responses")
 )
-```
-
-```{r}
 (
 number_efficiency_plot <- ggplot(efficency_matrix, aes(x = NbStrategies, y = Efficiency)) +
   geom_point() +
@@ -42,7 +41,9 @@ number_efficiency_plot <- ggplot(efficency_matrix, aes(x = NbStrategies, y = Eff
 
 # Subfig B
 
-```{r}
+To assess the effect of each NPI, we first estimated the added efficiency of each PHR when a particular NPI was present in univariate linear models, disaggregated by the number of NPIs implemented simultaneously. We found wide heterogeneity in efficiency between NPIs and for the same NPI at varying number of NPIs implemented simultaneously; only the presence of stay at home orders and strict bans on mass gatherings had consistent positive effects on PHR efficiency.
+
+```{r, fig.cap='Difference in response efficiency when a particular NPI was present (univariate models).'}
 (
 efficiency_uni_plot <- efficency_matrix %>%
   select(-DayStart, -DayEnd, -Country, -duration) %>%
@@ -61,7 +62,9 @@ efficiency_uni_plot <- efficency_matrix %>%
 
 # Subfig C: NPI in the highest efficiency responses
 
-````{r}
+In contrast, when we restricted the analysis to the most efficient PHRs, teleworking, bans to mass gatherings, and closure of businesses and services were the NPIs most consistently present across responses. Except for the closure of businesses and services, NPIs were seldom part of the most efficient PHRs when they had been partially relaxed.
+
+````{r, fig.cap='Shows which NPIs were part of the most efficient responses (light blue). Both B and C are disaggregated by the number NPIs that were implemented simultaneously.'}
 (
 max_efficiency_plot <- efficency_matrix %>%
   arrange(NbStrategies) %>%
