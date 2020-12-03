@@ -5,11 +5,16 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  class.warning = "collapsable-warnings",
+  message = FALSE
+)
+```
+
 ```{r}
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(ggplot2)
-})
+library(dplyr)
+library(ggplot2)
 ```
 
 ```{r}
@@ -74,3 +79,21 @@ sessionInfo()
 
 </details>
 
+```{js, echo=FALSE}
+(function() {
+  var codes = document.querySelectorAll('.collapsable-warnings');
+  var code, i, d, s, p;
+  for (i = 0; i < codes.length; i++) {
+    code = codes[i];
+    p = code.parentNode;
+    d = document.createElement('details');
+    s = document.createElement('summary');
+    s.innerText = 'Warnings';
+    // <details><summary>Details</summary></details>
+    d.appendChild(s);
+    // move the code into <details>
+    p.replaceChild(d, code);
+    d.appendChild(code);
+  }
+})();
+```

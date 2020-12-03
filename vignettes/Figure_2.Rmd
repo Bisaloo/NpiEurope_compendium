@@ -5,12 +5,17 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  class.warning = "collapsable-warnings",
+  message = FALSE
+)
+```
+
 ```{r}
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(ggplot2)
-  library(purrr)
-})
+library(dplyr)
+library(ggplot2)
+library(purrr)
 ```
 
 Despite large variability in terms of public health responses and sociocultural backgrounds across Europe, we were able to accurately quantify viral transmission rates over time in each country before and after implementation of public health responses, reproducing the observed national epidemiological dynamics.

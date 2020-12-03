@@ -5,13 +5,18 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  class.warning = "collapsable-warnings",
+  message = FALSE
+)
+```
+
 ```{r}
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(tidyr)
-  library(lme4)
-  library(ggplot2)
-})
+library(dplyr)
+library(tidyr)
+library(lme4)
+library(ggplot2)
 ```
 
 Importantly, these efficiencies were estimated for countries with very different socio-cultural and economic backgrounds, NPIs were implemented for different lengths of time, and there was substantial overlap between them. To address this, we estimated the change in response efficiency over time when adding or removing a particular NPI, while controlling for GDP, number of NPIs, length of implementation, and country of implementation. We show that adding stay at home recommendations for risk groups to the PHR resulted in the largest increase in efficiency (β=0.24, 95%CI 0.16-0.32) followed by teleworking (β=0.23, 95%CI 0.15-0.31). Partial relaxation of these NPIs resulted in significantly lower than average response efficiency. In addition, enforced stay at home orders for the general population, bans to gatherings of over 50 people, and closures of non-essential businesses or services all resulted in significant increases in efficiency over 15%. Less constraining versions of these NPIs, such as limiting mass gatherings to less than 1000 people or non-enforced stay at home recommendations for the general populations led to smaller increases in PHR efficiency. Closure of universities and higher education establishments had a larger effect (β=0.23, 95%CI 0.06-0.22) than the closure of schools at secondary, primary or preschool levels. Recommendations for the use of protective masks, whether on a voluntary or mandatory basis, were the only NPIs that did not result in significant improvements in PHR efficiency. In contrast with teleworking and stay at home recommendations for risk groups, partial relaxation of all other NPIs resulted in non-significant changes in PHR efficiency.

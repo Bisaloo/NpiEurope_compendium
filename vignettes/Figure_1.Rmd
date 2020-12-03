@@ -5,13 +5,18 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  class.warning = "collapsable-warnings",
+  message = FALSE
+)
+```
+
 ```{r}
-suppressPackageStartupMessages({
-  library(dplyr)
-  library(purrr)
-  library(tibble)
-  library(ggplot2)
-})
+library(dplyr)
+library(purrr)
+library(tibble)
+library(ggplot2)
 ```
 
 ```{r}
