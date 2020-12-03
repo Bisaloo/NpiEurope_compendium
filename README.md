@@ -36,21 +36,17 @@ vignettes by visiting
 
 ## Do it yourself
 
-To run the code yourself, instead of relying of the automatic updates, you will
+To run the code yourself instead of relying of the automatic updates, you will
 need to first install the functions defined here as well as the package
 dependencies.
 
-First, clone this repository and then enter the folder before starting R:
+This is done in two steps:
 
-```sh
-git clone git@github.com:Bisaloo/NpiEurope_compendium.git
-cd NpiEurope_compendium
-R
-```
-
-Then, inside R, everything can be installed with a single command:
+1. Copy the project and open it
+1. Install the functions and dependencies
 
 ```r
+create_from_github("Bisaloo/NpiEurope_compendium")
 remotes::install()
 ```
 
