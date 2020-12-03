@@ -18,7 +18,7 @@ epi_europe <- load_epi_data()
 npi_europe <- load_npi_data()
 ```
 
-```{r}
+```{r, fig.height=15}
 library(asymptor)
 
 epi_europe %>%
@@ -38,7 +38,7 @@ epi_europe %>%
   ggplot(aes(x = date)) +
     geom_ribbon(aes(ymin = detected + lower, ymax = detected + upper)) +
     geom_line(aes(y = detected), color = "red") +
-    facet_wrap(~ country, scales = "free_y")
+    facet_wrap(~ country, scales = "free_y", ncol = 3)
 ```
 
 

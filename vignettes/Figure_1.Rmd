@@ -47,7 +47,7 @@ duration_plot <- npi_europe %>%
 
 # Subfig B
 
-```{r}
+```{r, fig.width=10, fig.asp=1}
 library(ggcorrplot)
 (
 correlation_plot <- npi_europe %>%
@@ -62,17 +62,14 @@ correlation_plot <- npi_europe %>%
 )
 ```
 
-# Collage
+# Collage and export as pdf
 
-```{r}
+```{r, eval = FALSE}
 library(patchwork)
 
 duration_plot + correlation_plot +
   plot_annotation(tag_levels = "A") &
   theme(legend.position = "top")
-```
-
-```{r echo = FALSE, eval = FALSE}
 ggsave("Figure 1.pdf", width = 29.7, height = 21, units = "cm")
 ```
 

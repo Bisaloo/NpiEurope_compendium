@@ -67,7 +67,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
 }
 ```
 
-```{r}
+```{r, fig.height=15}
 list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
   rowwise() %>%
@@ -77,7 +77,7 @@ list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   ggplot(aes(x = Date)) +
     geom_ribbon(aes(ymin = sims_low, ymax = sims_high)) +
     geom_line(aes(y = NewCases), col = "red") +
-    facet_wrap(~ Country, scales = "free_y")
+    facet_wrap(~ Country, scales = "free_y", ncol = 3)
 ```
 
 # Reproducibility information

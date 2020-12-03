@@ -84,16 +84,13 @@ max_efficiency_plot <- efficency_matrix %>%
 )
 ```
 
-# Collage
+# Collage and export as pdf
 
-```{r}
+```{r, eval = FALSE}
 library(patchwork)
 
 ((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) &
   (theme_bw() + theme(legend.position = "none"))
-```
-
-```{r echo = FALSE, eval = FALSE}
 ggsave("Figure 3.pdf", width = 29.7, height = 21, units = "cm")
 ```
 
