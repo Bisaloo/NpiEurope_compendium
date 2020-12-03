@@ -46,7 +46,7 @@ To assess the effect of each NPI, we first estimated the added efficiency of eac
 ```{r, fig.cap='Difference in response efficiency when a particular NPI was present (univariate models).'}
 (
 efficiency_uni_plot <- efficency_matrix %>%
-  select(-DayStart, -DayEnd, -Country, -duration) %>%
+  select(-DayStart, -DayEnd, -Country, -duration, -GDP) %>%
   pivot_longer(!c(Efficiency, NbStrategies), names_to = "NPI") %>%
   group_by(NbStrategies, NPI) %>%
   summarise(coeff = coefficients(lm(Efficiency ~ value, data = cur_data()))[2]) %>%

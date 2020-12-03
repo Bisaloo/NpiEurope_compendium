@@ -23,7 +23,8 @@ efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
 ```{r, fig.cap='Results show the change in PHR efficiency over time when adding each of the 13 NPIs (mean adjusted effect and 95% confidence intervals in multivariate models). Results are disaggregated by level of implementation.'}
 efficiency_matrix %>%
   group_by(Country) %>%
-  mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0)) %>%
+  mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
+         GDP = GDP / 1e4) %>%
   select(-DayStart, -DayEnd, -Efficiency) %>%
   pivot_longer(!c(Country, dif.efficiency, NbStrategies, duration), names_to = "NPI") %>%
   group_by(NPI) %>%

@@ -5,14 +5,19 @@
 #'
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr %>%
+#' @importFrom read.csv
 #'
 #' @export
 create_summary_matrix <- function(folder, date = Sys.Date()) {
 
   npi_europe <- load_npi_data(date)
 
-  list.files(folder, pattern = "\\.csv$", full.names = TRUE) %>%
+  res <- list.files(folder, pattern = "\\.csv$", full.names = TRUE) %>%
     map_dfr(create_summary_country, npi_europe)
+
+  gdp <- read.csv(system.file("extdata", "GDP.csv", package = "NpiEurope"))
+
+  merge(res, gdp)
 
 }
 
