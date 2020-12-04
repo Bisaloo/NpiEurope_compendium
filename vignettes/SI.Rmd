@@ -70,7 +70,7 @@ an estimation of the efficiency of this response, therefore assuming that it had
 an instantaneous effect.
 
 ```{r, results='asis'}
-list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
+devnull <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
   lapply(function(f) {
       country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
 
