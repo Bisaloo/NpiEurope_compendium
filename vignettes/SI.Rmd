@@ -23,6 +23,8 @@ epi_europe <- load_epi_data()
 npi_europe <- load_npi_data()
 ```
 
+# Report rates
+
 ```{r, fig.height=15}
 library(asymptor)
 
@@ -46,6 +48,7 @@ epi_europe %>%
     facet_wrap(~ country, scales = "free_y", ncol = 3)
 ```
 
+# Efficiency of each public health responses
 
 ```{r, results='asis'}
 list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
