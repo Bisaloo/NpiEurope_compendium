@@ -46,7 +46,14 @@ This is done in two steps:
 1. Install the functions and dependencies
 
 ```r
-create_from_github("Bisaloo/NpiEurope_compendium")
+if (!require("usethis")) {
+  install.package("usethis")
+}
+usethis::create_from_github("Bisaloo/NpiEurope_compendium")
+
+if (!require("remotes")) {
+  install.packages("remotes")
+}
 remotes::install()
 ```
 
