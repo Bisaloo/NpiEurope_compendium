@@ -1,0 +1,17 @@
+---
+title: "Reproduciblity information"
+output: html_document
+---
+
+# Reproducibility information
+
+File created on `r Sys.Date()` with the following session details:
+
+<details>
+<summary>Session info</summary>
+
+```{r}
+sessionInfo()
+```
+
+</details>

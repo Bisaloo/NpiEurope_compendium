@@ -88,18 +88,8 @@ list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
   })
 ```
 
-# Reproducibility information
-
-File created on `r Sys.Date()` with the following session details:
-
-<details>
-<summary>Session info</summary>
-
-```{r}
-sessionInfo()
+```{r, child='_sessionInfo.Rmd'}
 ```
-
-</details>
 
 ```{js, echo=FALSE}
 (function() {
@@ -119,3 +109,4 @@ sessionInfo()
   }
 })();
 ```
+

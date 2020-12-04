@@ -102,15 +102,5 @@ library(patchwork)
 ggsave("Figure 3.pdf", width = 29.7, height = 21, units = "cm")
 ```
 
-# Reproducibility information
-
-File created on `r Sys.Date()` with the following session details:
-
-<details>
-<summary>Session info</summary>
-
-```{r}
-sessionInfo()
+```{r, child='_sessionInfo.Rmd'}
 ```
-
-</details>

@@ -60,15 +60,5 @@ efficiency_matrix %>%
   labs(x = "Change in efficiency when adding each NPI", y = "")
 ```
 
-# Reproducibility information
-
-File created on `r Sys.Date()` with the following session details:
-
-<details>
-<summary>Session info</summary>
-
-```{r}
-sessionInfo()
+```{r, child='_sessionInfo.Rmd'}
 ```
-
-</details>

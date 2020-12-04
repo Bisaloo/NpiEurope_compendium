@@ -86,15 +86,6 @@ list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
     geom_line(aes(y = NewCases), col = "red") +
     facet_wrap(~ Country, scales = "free_y", ncol = 3)
 ```
-# Reproducibility information
 
-File created on `r Sys.Date()` with the following session details:
-
-<details>
-<summary>Session info</summary>
-
-```{r}
-sessionInfo()
+```{r, child='_sessionInfo.Rmd'}
 ```
-
-</details>
