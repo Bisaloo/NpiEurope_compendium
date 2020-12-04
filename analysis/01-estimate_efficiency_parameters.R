@@ -60,8 +60,16 @@ foreach (country=countries) %dopar% {
     filter(Country == country) %>%
     select(-Country)
 
-  res <- simulate_country(epi_data, npi_data, contact_data, age_data, task = "estimate",
-                          Np = 10, Niter = 50, outfile = paste0(folder, "/", country))
+  oldchain <- read.csv(sprintf("%s/%s.csv", folder, country))
+  transmRate0 <- oldchain$transmRate[nrow(oldchain)]
+  vecEff0 <-  unlist(oldchain[nrow(oldchain), grepl("^vecEff", colnames(oldchain))])
+
+  res <- simulate_country(epi_data, npi_data, contact_data, age_data,
+                          task = "estimate",
+                          Np = 100, Niter = 5000,
+                          transmRate = transmRate0, vecEff = vecEff0,
+                          outfile = paste0(folder, "/", country))
+
   saveRDS(res, sprintf("%s/fullmcmc_%s.rds", folder, country))
 
 }
