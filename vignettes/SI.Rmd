@@ -25,6 +25,13 @@ npi_europe <- load_npi_data()
 
 # Report rates
 
+We estimated daily non-reported cases for each country using the daily new 
+reported cases and daily new deaths and the capture/recapture methodology
+described by 
+[Böhning *et al.* (2020)](https://doi.org/10.1016%2Fj.ijid.2020.06.009),
+implemented in the [asymptor](https://cran.r-project.org/package=asymptor)
+package.
+
 ```{r, fig.height=15}
 library(asymptor)
 
@@ -49,6 +56,18 @@ epi_europe %>%
 ```
 
 # Efficiency of each public health responses
+
+We estimated transmission rates per country over time through Bayesian inference
+by running a particle Monte Carlo Markov Chain (pMCMC) with the epidemiological
+model described earlier. The chains had 10,000 iterations with a burn-in of 90%
+and a thinning of 1/10. The likelihood was computed with a particle filter of
+100 particles and a negative binomial function of parameter 0.5 on the total
+daily number of new cases expected by the model and observed in the data (i.e.,
+number of cases notified to the national public health system and number of
+undetected cases estimated by the capture/recapture method). The ratio between
+transmission rates with and without implementation of the PHR evaluated provides
+an estimation of the efficiency of this response, therefore assuming that it had
+an instantaneous effect.
 
 ```{r, results='asis'}
 list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
