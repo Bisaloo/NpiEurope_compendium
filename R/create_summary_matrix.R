@@ -5,7 +5,7 @@
 #'
 #' @importFrom purrr map_dfr
 #' @importFrom dplyr %>%
-#' @importFrom read.csv
+#' @importFrom utils read.csv
 #'
 #' @export
 create_summary_matrix <- function(folder, date = Sys.Date()) {
