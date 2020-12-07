@@ -24,5 +24,5 @@ load_contact_data("France")
 \references{
 Kiesha Prem, Alex R. Cook, Mark Jit, Projecting social contact
 matrices in 152 countries using contact surveys and demographic data, PLoS
-Comp. Biol. (2017), \ifelse{{text}{doi: 10.1371/journal.pcbi.1005697 (URL: https://doi.org/10.1371/journal.pcbi.1005697)}{\ifelse{{latex}{doi:\out{\\nobreakspace{}}\href{https://doi.org/10.1371/journal.pcbi.1005697}{10.1371\out{\\slash{}}journal.pcbi.1005697}}{doi: \href{https://doi.org/10.1371/journal.pcbi.1005697}{10.1371/journal.pcbi.1005697}}}}}
+Comp. Biol. (2017), \doi{10.1371/journal.pcbi.1005697}
 }
