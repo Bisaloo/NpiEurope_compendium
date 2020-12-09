@@ -81,7 +81,7 @@ devnull <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
       contact_country <- load_contact_data(country)
       age_country <- sirage::load_age_data(country)
     
-      res <- sirage::summarise_estimation(f, npi_country, contact_country, age_country)
+      res <- summarise_estimation(f, npi_country, contact_country, age_country)
       
       cat("### ", country, "\n\n")
       print(knitr::kable(res))

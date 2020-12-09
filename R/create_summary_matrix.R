@@ -21,7 +21,7 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 
 }
 
-#' @importFrom sirage summarise_estimation load_age_data
+#' @importFrom sirage load_age_data
 #' @importFrom tibble rownames_to_column
 #' @importFrom dplyr %>% filter select mutate rowwise across c_across any_of cur_column
 #' @importFrom stats setNames

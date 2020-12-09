@@ -60,7 +60,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
   sims <- sirage::simulate_trajectory(
     file,
     epi_country, npi_country, contact_country, age_country,
-    Npost = 10
+    Npost = 20
   )
   
   sims <- as.data.frame(do.call(rbind, sims))
