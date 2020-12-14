@@ -40,19 +40,10 @@ foreach (country=countries) %dopar% {
   epi_data <- load_epi_data() %>%
     filter(Country == country) %>%
     select(-Country) %>%
-    transmute(
-      date = Date,
-      new_cases = NewCases,
-      new_deaths = NewDeaths
-    ) %>%
-    mutate(new_cases = pmax(new_cases, 0),
-           new_deaths = pmax(new_deaths, 0)) %>%
-    merge(asymptor::estimate_asympto(., bounds = "lower")) %>%
-    transmute(
-      Date = date,
-      NewCases = new_cases,
-      PropAsympto = lower / (lower+new_cases)
-    ) %>%
+    mutate(NewCases = pmax(NewCases, 0),
+           NewDeaths = pmax(NewDeaths, 0)) %>%
+    merge(asymptor::estimate_asympto(.$Date, .$NewCases, .$NewDeaths, bounds = "lower")) %>%
+    mutate(PropAsympto = lower / (lower+new_cases)) %>%
     mutate(PropAsympto = ifelse(is.finite(PropAsympto), PropAsympto, 0)) %>%
     mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 3, .after = 3, .complete = FALSE))
 
@@ -66,7 +57,7 @@ foreach (country=countries) %dopar% {
 
   res <- simulate_country(epi_data, npi_data, contact_data, age_data,
                           task = "estimate",
-                          Np = 100, Niter = 5000,
+                          Np = 10, Niter = 50,
                           transmRate = transmRate0, vecEff = vecEff0,
                           outfile = paste0(folder, "/", country))
 

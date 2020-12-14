@@ -29,7 +29,7 @@ Imports:
     tibble,
     tidyr
 Suggests:
-    asymptor,
+    asymptor (>= 1.0),
     doFuture,
     foreach,
     ggcorrplot,

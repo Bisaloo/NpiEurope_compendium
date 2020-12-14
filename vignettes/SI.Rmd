@@ -36,23 +36,17 @@ package.
 library(asymptor)
 
 epi_europe %>%
-  transmute(
-    date = as.Date(Date), 
-    new_cases = NewCases, 
-    new_deaths = NewDeaths,
-    country = Country
-  ) %>%
-  group_by(country) %>%
-  mutate(new_cases = pmax(new_cases, 0),
-         new_deaths = pmax(new_deaths, 0)) %>%
-  mutate(new_cases = slider::slide_dbl(new_cases, mean, .before = 3, .after = 3),
-         new_deaths = slider::slide_dbl(new_deaths, mean, .before = 3, .after = 3)) %>%
-  summarise(estimate_asympto(cur_data()),
-            detected = new_cases) %>%
+  group_by(Country) %>%
+  mutate(NewCases = pmax(NewCases, 0),
+         NewDeaths = pmax(NewDeaths, 0)) %>%
+  mutate(NewCases = slider::slide_dbl(NewCases, mean, .before = 3, .after = 3),
+         NewDeaths = slider::slide_dbl(NewDeaths, mean, .before = 3, .after = 3)) %>%
+  summarise(estimate_asympto(Date, NewCases, NewDeaths),
+            detected = NewCases) %>%
   ggplot(aes(x = date)) +
     geom_ribbon(aes(ymin = detected + lower, ymax = detected + upper)) +
     geom_line(aes(y = detected), color = "red") +
-    facet_wrap(~ country, scales = "free_y", ncol = 3)
+    facet_wrap(~ Country, scales = "free_y", ncol = 3)
 ```
 
 # Efficiency of each public health responses
