@@ -13,7 +13,7 @@ load_npi_data <- function(end_date = Sys.Date()) {
   end_date <- as.Date(end_date)
 
   npi_data <- read.csv("https://www.ecdc.europa.eu/sites/default/files/documents/response_graphs_data_0.csv") %>%
-    mutate(across(c(date_start, date_end), as.Date)) %>%
+    mutate(across(c(date_start, date_end), as.Date, format = "%d/%m/%Y")) %>%
     mutate(date_end = if_else(is.na(date_end), end_date, date_end))
 
   holidays <- read.csv(system.file("extdata", "summer_holidays.csv", package = "NpiEurope")) %>%
