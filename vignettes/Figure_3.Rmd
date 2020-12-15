@@ -20,7 +20,7 @@ library(tibble)
 ```
 
 ```{r}
-efficency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
+efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
 ```
 
 # Subfig A
@@ -29,13 +29,13 @@ Overall, the combination of NPIs implemented as part of PHRs across Europe had a
 
 ```{r, fig.cap='Efficiency of PHRs, which has a positive correlation with the number of NPIs implemented simultaneously. Reductions in transmission above 66% (red dashed line) can achieve suppression given a R0 of 3.', fig.show='hold'}
 (
-hist_plot <- ggplot(efficency_matrix, aes(y = Efficiency)) +
+hist_plot <- ggplot(efficiency_matrix, aes(y = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
   labs(x = "Public Health Responses")
 )
 (
-number_efficiency_plot <- ggplot(efficency_matrix, aes(x = NbStrategies, y = Efficiency)) +
+number_efficiency_plot <- ggplot(efficiency_matrix, aes(x = NbStrategies, y = Efficiency)) +
   geom_point() +
   geom_smooth(method = "lm") +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
@@ -50,7 +50,7 @@ To assess the effect of each NPI, we first estimated the added efficiency of eac
 
 ```{r, fig.cap='Difference in response efficiency when a particular NPI was present (univariate models).'}
 (
-efficiency_uni_plot <- efficency_matrix %>%
+efficiency_uni_plot <- efficiency_matrix %>%
   select(-DayStart, -DayEnd, -Country, -duration, -GDP) %>%
   pivot_longer(!c(Efficiency, NbStrategies), names_to = "NPI") %>%
   group_by(NbStrategies, NPI) %>%
@@ -71,7 +71,7 @@ In contrast, when we restricted the analysis to the most efficient PHRs, telewor
 
 ````{r, fig.cap='Shows which NPIs were part of the most efficient responses (light blue). Both B and C are disaggregated by the number NPIs that were implemented simultaneously.'}
 (
-max_efficiency_plot <- efficency_matrix %>%
+max_efficiency_plot <- efficiency_matrix %>%
   arrange(NbStrategies) %>%
   group_by(NbStrategies) %>%
   filter(Efficiency == max(Efficiency)) %>%
