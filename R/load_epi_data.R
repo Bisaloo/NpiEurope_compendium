@@ -24,7 +24,7 @@ load_epi_data <- function() {
                           "Germany", "Greece",
                           "Hungary",
                           "Iceland", "Ireland", "Italy",
-                          "Latvia", "Lithuania", "Luxembourg",
+                          "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
                           "Malta",
                           "Netherlands", "Norway",
                           "Poland", "Portugal",

@@ -15,7 +15,7 @@ countries <- c("Austria",
                "Germany", "Greece",
                "Hungary",
                "Iceland", "Ireland", "Italy",
-               "Latvia", "Lithuania", "Luxembourg",
+               "Latvia", "Lithuania", "Liechtenstein", "Luxembourg",
                "Malta",
                "Netherlands", "Norway",
                "Poland", "Portugal",
@@ -42,8 +42,8 @@ foreach (country=countries) %dopar% {
     select(-Country) %>%
     mutate(NewCases = pmax(NewCases, 0),
            NewDeaths = pmax(NewDeaths, 0)) %>%
-    merge(asymptor::estimate_asympto(.$Date, .$NewCases, .$NewDeaths, bounds = "lower")) %>%
-    mutate(PropAsympto = lower / (lower+new_cases)) %>%
+    mutate(lower = asymptor::estimate_asympto(Date, NewCases, NewDeaths, bounds = "lower")$lower) %>%
+    mutate(PropAsympto = lower / (lower+NewCases)) %>%
     mutate(PropAsympto = ifelse(is.finite(PropAsympto), PropAsympto, 0)) %>%
     mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 3, .after = 3, .complete = FALSE))
 
