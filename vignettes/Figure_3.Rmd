@@ -38,6 +38,12 @@ hist_plot <- ggplot(efficiency_matrix, aes(y = Efficiency)) +
 number_efficiency_plot <- ggplot(efficiency_matrix, aes(x = NbStrategies, y = Efficiency)) +
   geom_point() +
   geom_smooth(method = "lm") +
+  annotate("text", x = 12, y = 0.37, color = "darkblue",
+           label = sprintf(
+             "R² = %.2f\np = %.2e", 
+             cor(efficiency_matrix$NbStrategies, efficiency_matrix$Efficiency),
+             cor.test(efficiency_matrix$NbStrategies, efficiency_matrix$Efficiency)$p.value),
+           parse = FALSE) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
   labs(x = "NPIs implemented") +
   scale_x_continuous(breaks = seq(1, 13, 2))
