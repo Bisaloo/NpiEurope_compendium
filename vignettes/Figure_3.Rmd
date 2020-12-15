@@ -59,7 +59,7 @@ efficiency_uni_plot <- efficency_matrix %>%
   ggplot(aes(x = NbStrategies, y = NPI, fill = coeff)) +
     geom_tile() +
     geom_text(aes(label = round(coeff, 2)), size = 2.5) +
-    scale_fill_gradient2(high = "darkgreen") +
+    scale_fill_gradient2(low = "#998ec3", high = "#f1a340") +
     scale_x_continuous(breaks = seq(1, 11)) +
     labs(x = "NPIs implemented", y = "")
 )
