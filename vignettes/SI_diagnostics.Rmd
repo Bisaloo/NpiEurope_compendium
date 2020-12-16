@@ -33,8 +33,8 @@ transmission rates with and without implementation of the PHR evaluated provides
 an estimation of the efficiency of this response, therefore assuming that it had
 an instantaneous effect.
 
-```{r, results='asis'}
-devnull <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
+```{r, results='asis', fig.height = 10}
+tabres <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
   lapply(function(f) {
       country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
 
@@ -47,8 +47,30 @@ devnull <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
     
       res <- summarise_estimation(f, npi_country, contact_country, age_country)
       
+      mcmcout <- read.csv(f) %>%
+        select(-Iteration, -Likelihood) %>%
+        coda::as.mcmc()
+      
       cat("### ", country, "\n\n")
-      print(knitr::kable(res))
+      
+      plot(mcmcout)
+      
+      # This is not an issue since the computation of effectiveSize is affine-invariant
+      mcmcout[, "transmRate"] <- mcmcout[, "transmRate"] * 1e8
+      res$ESS <- coda::effectiveSize(mcmcout)
+      
+      print(knitr::kable(
+        res, 
+        caption = paste0(
+          "Efficiencies of the PHR implemented in ", country, ". The first ",
+          "column contains the list of the NPIs in the current PHR, the second",
+          " and third columns contain the 95% credibility interval of the ",
+          "estimation. The fourth and fifth column contain the day of start ",
+          "and end of the current PHR and the last column contains the ",
+          "effective sample size of the MCMC estimation."
+        )
+      ))
+
   })
 ```
 
