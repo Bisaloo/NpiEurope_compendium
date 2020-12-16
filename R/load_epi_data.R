@@ -4,7 +4,7 @@
 #' https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide
 #'
 #' @importFrom utils read.csv
-#' @importFrom dplyr %>% filter transmute
+#' @importFrom dplyr %>% filter transmute arrange
 #'
 #' @export
 load_epi_data <- function() {
@@ -31,6 +31,7 @@ load_epi_data <- function() {
                           "Romania",
                           "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
                           "United_Kingdom")) %>%
-    mutate(Country = if_else(Country == "United_Kingdom", "United Kingdom", Country))
+    mutate(Country = if_else(Country == "United_Kingdom", "United Kingdom", Country)) %>%
+    arrange(Country, Date)
 
 }
