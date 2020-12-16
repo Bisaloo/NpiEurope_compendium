@@ -1,0 +1,76 @@
+---
+title: "ESM: MCMC diagnostics and detailed estimations"
+author: "Hugo Gruson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  class.warning = "collapsable-warnings",
+  message = FALSE
+)
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+library(NpiEurope)
+npi_europe <- load_npi_data()
+```
+
+We estimated transmission rates per country over time through Bayesian inference
+by running a particle Monte Carlo Markov Chain (pMCMC) with the epidemiological
+model described earlier. The chains had 10,000 iterations with a burn-in of 90%
+and a thinning of 1/10. The likelihood was computed with a particle filter of
+100 particles and a negative binomial function of parameter 0.5 on the total
+daily number of new cases expected by the model and observed in the data (i.e.,
+number of cases notified to the national public health system and number of
+undetected cases estimated by the capture/recapture method). The ratio between
+transmission rates with and without implementation of the PHR evaluated provides
+an estimation of the efficiency of this response, therefore assuming that it had
+an instantaneous effect.
+
+```{r, results='asis'}
+devnull <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
+  lapply(function(f) {
+      country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
+
+      npi_country <- npi_europe %>%
+        filter(Country == country) %>%
+        select(-Country)
+    
+      contact_country <- load_contact_data(country)
+      age_country <- sirage::load_age_data(country)
+    
+      res <- summarise_estimation(f, npi_country, contact_country, age_country)
+      
+      cat("### ", country, "\n\n")
+      print(knitr::kable(res))
+  })
+```
+
+```{r, child='_sessionInfo.Rmd'}
+```
+
+```{js, echo=FALSE}
+(function() {
+  var codes = document.querySelectorAll('.collapsable-warnings');
+  var code, i, d, s, p;
+  for (i = 0; i < codes.length; i++) {
+    code = codes[i];
+    p = code.parentNode;
+    d = document.createElement('details');
+    s = document.createElement('summary');
+    s.innerText = 'Warnings';
+    // <details><summary>Details</summary></details>
+    d.appendChild(s);
+    // move the code into <details>
+    p.replaceChild(d, code);
+    d.appendChild(code);
+  }
+})();
+```
+
