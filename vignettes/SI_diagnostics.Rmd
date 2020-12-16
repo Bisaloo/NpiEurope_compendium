@@ -33,7 +33,7 @@ transmission rates with and without implementation of the PHR evaluated provides
 an estimation of the efficiency of this response, therefore assuming that it had
 an instantaneous effect.
 
-```{r, results='asis', fig.height = 10}
+```{r, results='asis'}
 tabres <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
   lapply(function(f) {
       country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
@@ -53,11 +53,19 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
       
       cat("### ", country, "\n\n")
       
-      plot(mcmcout)
+      plot(mcmcout[, "transmRate"])
+      
+      for (i in 2:ncol(mcmcout)) {
+        par(mfrow = c(1, 2))
+        coda::traceplot(mcmcout[, i, drop = FALSE], ylim = c(0, 1))
+        coda::densplot(mcmcout[, i, drop = FALSE], xlim = c(0, 1))
+      }
       
       # This is not an issue since the computation of effectiveSize is affine-invariant
       mcmcout[, "transmRate"] <- mcmcout[, "transmRate"] * 1e8
       res$ESS <- coda::effectiveSize(mcmcout)
+      
+      # res$Geweke <- sprintf("%.2e", pnorm(abs(geweke.diag(mcmcout)$z),lower.tail=FALSE)*2)
       
       print(knitr::kable(
         res, 
