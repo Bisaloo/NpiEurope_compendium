@@ -9,6 +9,7 @@
 #' @export
 load_epi_data <- function() {
 
-  read.csv(system.file("extdata", "epi_europe.csv", package = "NpiEurope"))
+  read.csv(system.file("extdata", "epi_europe.csv", package = "NpiEurope"),
+           colClasses = c("Date", "integer", "integer", "character"))
 
 }
