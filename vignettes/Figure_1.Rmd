@@ -65,7 +65,7 @@ correlation_plot <- npi_europe %>%
   cor() %>%
   ggcorrplot(method = "circle", type = "upper",
              hc.order = FALSE,
-             colors = c("tomato2", "white", "springgreen3"),
+             colors = c("#998ec3", "white", "#f1a340"),
              ggtheme = theme_bw,
              legend.title = "Correlation")
 )
