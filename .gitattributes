@@ -1,1 +1,2 @@
 MCMC_NpiEurope/* filter=lfs diff=lfs merge=lfs -text
+inst/extdata/COVID-19-geographic-disbtribution-worldwide-2020-12-14.csv filter=lfs diff=lfs merge=lfs -text

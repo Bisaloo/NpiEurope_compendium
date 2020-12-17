@@ -9,7 +9,7 @@
 #' @export
 load_epi_data <- function() {
 
-  read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv") %>%
+  read.csv(system.file("extdata", "COVID-19-geographic-disbtribution-worldwide-2020-12-14.csv", package = "NpiEurope")) %>%
     filter(continentExp == "Europe") %>%
     transmute(Date = as.Date(paste(year, month, day, sep = "-")),
               NewCases = cases,
