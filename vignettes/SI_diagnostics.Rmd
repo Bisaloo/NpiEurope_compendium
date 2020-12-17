@@ -53,7 +53,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
       
       cat("### ", country, "\n\n")
       
-      plot(mcmcout[, "transmRate"])
+      plot(mcmcout[, "transmRate", drop = FALSE])
       
       for (i in 2:ncol(mcmcout)) {
         par(mfrow = c(1, 2))
