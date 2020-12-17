@@ -29,7 +29,9 @@ navbar:
           href: articles/Figure_3.html
         - text: Figure 4
           href: articles/Figure_4.html
-        - text: ESM
-          href: articles/SI.html
+        - text: "ESM: MCMC Diagnostics"
+          href: articles/SI_diagnostics.html
+        - text: "ESM: Report Rates"
+          href: articles/SI_report_rate.html
     - text: Article on medRxiv
       href: https://doi.org/10.1101/2020.08.17.20174821
