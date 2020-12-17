@@ -30,6 +30,7 @@ Imports:
     tidyr
 Suggests:
     asymptor (>= 1.0),
+    coda,
     doFuture,
     foreach,
     ggcorrplot,
