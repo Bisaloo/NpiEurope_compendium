@@ -63,7 +63,7 @@ correlation_plot <- npi_europe %>%
   select(-Date, -Country) %>%
   relocate(sort(tidyselect::peek_vars())) %>%
   cor() %>%
-  ggcorrplot(method = "circle", type = "upper",
+  ggcorrplot(method = "circle", type = "lower",
              hc.order = FALSE,
              colors = c("#998ec3", "white", "#f1a340"),
              ggtheme = theme_bw,
