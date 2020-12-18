@@ -59,8 +59,9 @@ To assess the effect of each NPI, we first estimated the added efficiency of eac
 efficiency_uni_plot <- efficiency_matrix %>%
   select(-DayStart, -DayEnd, -Country, -duration, -GDP) %>%
   pivot_longer(!c(Efficiency, NbStrategies), names_to = "NPI") %>%
-  group_by(NbStrategies, NPI) %>%
-  summarise(coeff = coefficients(lm(Efficiency ~ value, data = cur_data()))[2]) %>%
+  group_by(NbStrategies, NPI, value) %>%
+  summarise(coeff = mean(Efficiency)) %>%
+  summarise(coeff = diff(coeff)) %>%
   filter(NbStrategies >= 4 & NbStrategies <= 11) %>%
   ggplot(aes(x = NbStrategies, y = NPI, fill = coeff)) +
     geom_tile() +
