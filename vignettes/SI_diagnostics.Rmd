@@ -1,7 +1,5 @@
 ---
 title: "ESM: MCMC diagnostics and detailed estimations"
-author: "Hugo Gruson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 

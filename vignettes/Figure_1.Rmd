@@ -1,7 +1,5 @@
 ---
 title: "Figure 1: Implementation of NPIs against COVID-19 in Europe."
-author: "Hugo Gruson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 

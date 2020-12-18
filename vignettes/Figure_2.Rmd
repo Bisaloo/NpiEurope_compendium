@@ -1,7 +1,5 @@
 ---
 title: "Figure 2: Model fit of COVID-19 incidence across European countries."
-author: "Hugo Gruson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
@@ -68,10 +66,11 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
 ```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}
 list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
+  group_by(Country) %>%
+#  mutate(crps = crps_sample(NewCases, as.matrix()))
   rowwise() %>%
   mutate(sims_low = quantile(c_across(V1:V20), probs = 0.05),
-         sims_high = quantile(c_across(V1:V20), probs = 0.95),
-         .keep = "unused") %>%
+         sims_high = quantile(c_across(V1:V20), probs = 0.95)) %>%
   ggplot(aes(x = Date)) +
     geom_ribbon(aes(ymin = sims_low, ymax = sims_high)) +
     geom_line(aes(y = NewCases), col = "red") +

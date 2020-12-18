@@ -1,7 +1,5 @@
 ---
 title: "Figure 4: Additional PHR efficiency gained with NPIs implemented against COVID-19 in Europe."
-author: "Hugo Gruson"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_document
 ---
 
