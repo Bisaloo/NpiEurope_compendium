@@ -67,6 +67,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.csv$", full.names = TRUE) %>%
       
       print(knitr::kable(
         res, 
+        digits = 2,
         caption = paste0(
           "Efficiencies of the PHR implemented in ", country, ". The first ",
           "column contains the list of the NPIs in the current PHR, the second",
