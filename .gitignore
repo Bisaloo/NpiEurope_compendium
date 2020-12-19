@@ -6,3 +6,4 @@ MCMC_temp.csv
 *.DS_Store
 *.pdf
 *estim_*
+*.rds
