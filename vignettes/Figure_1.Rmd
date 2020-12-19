@@ -77,7 +77,7 @@ library(patchwork)
 duration_plot + correlation_plot +
   plot_annotation(tag_levels = "A") &
   theme(legend.position = "top")
-ggsave("Figure 1.pdf", width = 29.7, height = 21, units = "cm")
+ggsave("Figure 1.pdf", width = 42, height = 29.7, units = "cm")
 ```
 
 ```{r, child='_sessionInfo.Rmd'}

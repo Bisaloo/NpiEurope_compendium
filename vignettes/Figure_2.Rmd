@@ -1,6 +1,8 @@
 ---
 title: "Figure 2: Model fit of COVID-19 incidence across European countries."
 output: rmarkdown::html_document
+params:
+  export_figs: false
 ---
 
 ```{r setup, include = FALSE}
@@ -8,6 +10,11 @@ knitr::opts_chunk$set(
   class.warning = "collapsable-warnings",
   message = FALSE
 )
+if (params$export_figs) {
+  ncols = 5
+} else {
+  ncols = 3
+}
 ```
 
 ```{r}
@@ -64,7 +71,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
 ```
 
 ```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}
-list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
+(comparison_simulations <- list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
   group_by(Country) %>%
 #  mutate(crps = crps_sample(NewCases, as.matrix()))
@@ -74,7 +81,11 @@ list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
   ggplot(aes(x = Date)) +
     geom_ribbon(aes(ymin = sims_low, ymax = sims_high)) +
     geom_line(aes(y = NewCases), col = "red") +
-    facet_wrap(~ Country, scales = "free_y", ncol = 3)
+    facet_wrap(~ Country, scales = "free_y", ncol = ncols))
+```
+
+```{r, eval = FALSE}
+ggsave("Figure 2.pdf", width = 29.7, height = 21, units = "cm")
 ```
 
 ```{r, child='_sessionInfo.Rmd'}

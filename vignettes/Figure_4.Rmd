@@ -55,7 +55,11 @@ efficiency_matrix %>%
   geom_errorbarh(aes(xmin = low.ci.control, xmax = up.ci.control)) +
   geom_point() +
   facet_wrap(~ Partial) +
-  labs(x = "Change in efficiency when adding each NPI", y = "")
+  labs(x = "Change in efficiency when adding each NPI", y = "") +
+  theme_bw()
+```
+```{r, eval = FALSE}
+ggsave("Figure 4.pdf", width = 29.7, height = 21, units = "cm")
 ```
 
 ```{r, child='_sessionInfo.Rmd'}

@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
 ```{r}
 library(dplyr)
 library(ggplot2)
+theme_set(theme_bw())
 library(tidyr)
 library(tibble)
 ```
@@ -66,7 +67,7 @@ efficiency_uni_plot <- efficiency_matrix %>%
     geom_text(aes(label = round(coeff, 2)), size = 2.5) +
     scale_fill_gradient2(low = "#998ec3", high = "#f1a340") +
     scale_x_continuous(breaks = seq(1, 11)) +
-    labs(x = "NPIs implemented", y = "")
+    labs(x = "NPIs implemented", y = "") 
 )
 ```
 
@@ -102,9 +103,9 @@ max_efficiency_plot <- efficiency_matrix %>%
 ```{r, eval = FALSE}
 library(patchwork)
 
-((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) &
-  (theme_bw() + theme(legend.position = "none"))
-ggsave("Figure 3.pdf", width = 29.7, height = 21, units = "cm")
+((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) + 
+  plot_annotation(tag_levels = "A")
+ggsave("Figure 3.pdf", width = 50, height = 25, units = "cm")
 ```
 
 ```{r, child='_sessionInfo.Rmd'}
