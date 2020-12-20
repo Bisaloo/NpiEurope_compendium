@@ -84,7 +84,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
     facet_wrap(~ Country, scales = "free_y", ncol = ncols))
 ```
 
-```{r, eval = FALSE}
+```{r, eval = params$export_figs}
 ggsave("Figure 2.pdf", width = 29.7, height = 21, units = "cm")
 ```
 

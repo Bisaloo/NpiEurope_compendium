@@ -1,6 +1,8 @@
 ---
 title: "Figure 4: Additional PHR efficiency gained with NPIs implemented against COVID-19 in Europe."
 output: rmarkdown::html_document
+params:
+  export_figs: false
 ---
 
 ```{r setup, include = FALSE}
@@ -58,7 +60,7 @@ efficiency_matrix %>%
   labs(x = "Change in efficiency when adding each NPI", y = "") +
   theme_bw()
 ```
-```{r, eval = FALSE}
+```{r, eval = params$export_figs}
 ggsave("Figure 4.pdf", width = 29.7, height = 21, units = "cm")
 ```
 

@@ -1,6 +1,8 @@
 ---
 title: "Figure 3: Efficiency of PHRs and NPIs implemented against COVID-19 in Europe."
 output: rmarkdown::html_document
+params:
+  export_figs: false
 ---
 
 ```{r setup, include = FALSE}
@@ -100,7 +102,7 @@ max_efficiency_plot <- efficiency_matrix %>%
 
 # Collage and export as pdf
 
-```{r, eval = FALSE}
+```{r, eval = params$export_figs}
 library(patchwork)
 
 ((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) + 

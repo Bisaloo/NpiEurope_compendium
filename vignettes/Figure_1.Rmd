@@ -1,6 +1,9 @@
 ---
 title: "Figure 1: Implementation of NPIs against COVID-19 in Europe."
 output: rmarkdown::html_document
+params:
+  export_figs: false
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -71,7 +74,7 @@ correlation_plot <- npi_europe %>%
 
 # Collage and export as pdf
 
-```{r, eval = FALSE}
+```{r, eval = params$export_figs}
 library(patchwork)
 
 duration_plot + correlation_plot +
