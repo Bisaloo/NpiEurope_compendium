@@ -35,7 +35,7 @@ epi_europe <- load_epi_data(end_date = params$end_date)
 ```{r}
 simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
   
-  country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
+  country <- gsub(".*/((\\w|\\s)+)\\.rds$", "\\1", file)
   
   npi_country <- npi_europe %>%
     filter(Country == country) %>%
@@ -55,7 +55,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
   age_country <- sirage::load_age_data(country)
 
   sims <- sirage::simulate_trajectory(
-    file,
+    readRDS(file),
     epi_country, npi_country, contact_country, age_country,
     Npost = 20
   )
@@ -72,7 +72,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
 ```
 
 ```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}
-(comparison_simulations <- list.files("../MCMC_NpiEurope", pattern = "\\.csv$", full.names = TRUE) %>%
+(comparison_simulations <- list.files("../MCMC_NpiEurope", pattern = "\\.rds$", full.names = TRUE) %>%
   map_dfr(simulate_from_MCMC, npi_europe, epi_europe) %>%
   group_by(Country) %>%
 #  mutate(crps = crps_sample(NewCases, as.matrix()))

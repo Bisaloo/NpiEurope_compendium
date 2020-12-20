@@ -12,7 +12,7 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 
   npi_europe <- load_npi_data(date)
 
-  res <- list.files(folder, pattern = "\\.csv$", full.names = TRUE) %>%
+  res <- list.files(folder, pattern = "\\.rds$", full.names = TRUE) %>%
     map_dfr(create_summary_country, npi_europe)
 
   gdp <- read.csv(system.file("extdata", "GDP.csv", package = "NpiEurope"))
@@ -27,13 +27,13 @@ create_summary_matrix <- function(folder, date = Sys.Date()) {
 #' @importFrom stats setNames
 create_summary_country <- function(file, npi_europe) {
 
-  country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", file)
+  country <- gsub(".*/((\\w|\\s)+)\\.rds$", "\\1", file)
 
   npi_country <- npi_europe %>%
     filter(Country == country) %>%
     select(-Country)
 
-  s <- summarise_estimation(file, npi_country)[-1, ] %>%
+  s <- summarise_estimation(readRDS(file), npi_country)[-1, ] %>%
     rownames_to_column("strats")
 
   skeleton <- setNames(

@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(dplyr)
+library(coda)
 ```
 
 ```{r}
@@ -34,38 +35,18 @@ the efficiency of this response, therefore assuming that it had an instantaneous
 effect.
 
 ```{r, results='asis'}
-tabres <- list.files("../1stwave_goodstart/", "\\.csv$", full.names = TRUE) %>%
+tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
   lapply(function(f) {
     
-      country <- gsub(".*/((\\w|\\s)+)\\.csv$", "\\1", f)
+      country <- gsub(".*/((\\w|\\s)+)\\.rds$", "\\1", f)
       
       message(country)
 
       npi_country <- npi_europe %>%
         filter(Country == country) %>%
         select(-Country)
-    
-      contact_country <- load_contact_data(country)
-      age_country <- sirage::load_age_data(country)
       
-      mcmcout1 <- read.csv(sprintf("../%s/%s.csv", "MCMC_NpiEurope_1stwave_2020-12-19", country)) %>%
-#        filter(Iteration > 500) %>%
-        select(-Iteration, -Likelihood) %>%
-        mutate(R0 = sirage::transmRate_to_R0(transmRate, age_country, contact_country),
-               .keep = "unused",
-               .before = 1) %>%
-        coda::as.mcmc(start = 1, thin = 10)
-      mcmcout2 <- read.csv(sprintf("../%s/%s.csv", "MCMC_NpiEurope_1stwave_2020-12-19_2", country)) %>%
-#        filter(Iteration > 500) %>%
-        select(-Iteration, -Likelihood) %>%
-        mutate(R0 = sirage::transmRate_to_R0(transmRate, age_country, contact_country),
-               .keep = "unused",
-               .before = 1) %>%
-        coda::as.mcmc(start = 1, thin = 10)
-      # mcmcout3 <- read.csv(sprintf("../%s/%s.csv", "MCMC_NpiEurope_1stwave_2020-12-19_3", country)) %>%
-      #   select(-Iteration, -Likelihood) %>%
-      #   coda::as.mcmc()
-      mcmcout <- coda::mcmc.list(mcmcout1, mcmcout2)
+      mcmcout <- readRDS(f)
       
       cat("### ", country, "\n\n")
       
