@@ -22,7 +22,7 @@ library(ggplot2)
 
 ```{r}
 library(NpiEurope)
-npi_europe <- load_npi_data()
+npi_europe <- load_npi_data(end_date = params$end_date)
 ```
 
 # Subfig A

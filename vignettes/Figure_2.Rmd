@@ -3,6 +3,7 @@ title: "Figure 2: Model fit of COVID-19 incidence across European countries."
 output: rmarkdown::html_document
 params:
   export_figs: false
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -27,8 +28,8 @@ Despite large variability in terms of public health responses and sociocultural 
 
 ```{r}
 library(NpiEurope)
-npi_europe <- load_npi_data()
-epi_europe <- load_epi_data()
+npi_europe <- load_npi_data(end_date = params$end_date)
+epi_europe <- load_epi_data(end_date = params$end_date)
 ```
 
 ```{r}

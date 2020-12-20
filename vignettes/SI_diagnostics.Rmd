@@ -1,6 +1,8 @@
 ---
 title: "ESM: MCMC diagnostics and detailed estimations"
 output: rmarkdown::html_document
+params:
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -16,7 +18,7 @@ library(dplyr)
 
 ```{r}
 library(NpiEurope)
-npi_europe <- load_npi_data()
+npi_europe <- load_npi_data(end_date = params$end_date)
 ```
 
 We estimated transmission rates per country over time through Bayesian inference

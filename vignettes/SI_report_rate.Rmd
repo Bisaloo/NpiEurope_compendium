@@ -1,6 +1,8 @@
 ---
 title: "ESM: report rates"
 output: rmarkdown::html_document
+params:
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -17,7 +19,7 @@ library(ggplot2)
 
 ```{r}
 library(NpiEurope)
-epi_europe <- load_epi_data()
+epi_europe <- load_epi_data(end_date = params$end_date)
 ```
 
 We estimated daily non-reported cases for each country using the daily new 
