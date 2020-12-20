@@ -1,17 +1,11 @@
 #' Get 95% credibility intervals for estimations
 #'
+#' @param MCMC `mcmc` or `mcmc.list` object coda object
+#'
 #' @importFrom utils read.csv
 #'
 #' @export
 summarise_estimation <- function(MCMC, npi_data) {
-
-  if (!file.exists(MCMC_file)) {
-      stop(
-        "You specified a file path but no file was found there. ",
-        "Please try again.", call. = FALSE
-      )
-  }
-
 
   dataStrat <- sirage::get_strats(npi_data, min_duration = 5)
 
@@ -19,10 +13,7 @@ summarise_estimation <- function(MCMC, npi_data) {
 
   nbstrats <- length(name_strats)
 
-  df <- as.matrix(read.csv(MCMC_file))
-  lkl <- df[, 2]
-  df <- df[, 3:ncol(df), drop = FALSE]
-  ci_params <- t(apply(df, 2, quantile, c(0.025, 0.975), na.rm  = TRUE))
+  ci_params <- summary(MCMC, c(0.025, 0.975))$quantiles
 
   rownames(ci_params) <- c("R0", rle(dataStrat)$values[-1])
 
