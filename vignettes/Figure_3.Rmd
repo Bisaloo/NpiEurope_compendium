@@ -3,6 +3,7 @@ title: "Figure 3: Efficiency of PHRs and NPIs implemented against COVID-19 in Eu
 output: rmarkdown::html_document
 params:
   export_figs: false
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -21,7 +22,7 @@ library(tibble)
 ```
 
 ```{r}
-efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
+efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope", date = params$end_date)
 ```
 
 # Subfig A
