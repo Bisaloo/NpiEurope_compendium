@@ -33,10 +33,7 @@ create_summary_country <- function(file, npi_europe) {
     filter(Country == country) %>%
     select(-Country)
 
-  contact_country <- load_contact_data(country)
-  age_country <- load_age_data(country)
-
-  s <- summarise_estimation(file, npi_country, contact_country, age_country)[-1, ] %>%
+  s <- summarise_estimation(file, npi_country)[-1, ] %>%
     rownames_to_column("strats")
 
   skeleton <- setNames(
