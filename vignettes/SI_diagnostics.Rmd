@@ -50,7 +50,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
       
       cat("### ", country, "\n\n")
       
-      plot(mcmcout[, "R0", drop = FALSE])
+      plot(mcmcout[, "transmRate", drop = FALSE])
       
       for (i in 2:ncol(mcmcout[[1]])) {
         par(mfrow = c(1, 2))
@@ -58,8 +58,11 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
         coda::densplot(mcmcout[, i, drop = FALSE], xlim = c(0, 1))
       }
       
-      # This is not an issue since the computation of effectiveSize is affine-invariant
+
       res <- summarise_estimation(mcmcout, npi_country)
+     
+      # This is not an issue since the computation of effectiveSize is affine-invariant 
+      mcmcout[, "transmRate", drop = FALSE] <- mcmcout[, "transmRate", drop = FALSE] * 1e8
       
       res$ESS <- coda::effectiveSize(mcmcout)
       
