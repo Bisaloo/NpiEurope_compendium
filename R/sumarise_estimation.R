@@ -15,7 +15,7 @@ summarise_estimation <- function(MCMC, npi_data) {
 
   ci_params <- summary(MCMC, c(0.025, 0.975))$quantiles
 
-  rownames(ci_params) <- c("R0", rle(dataStrat)$values[-1])
+  rownames(ci_params) <- c("transmRate", rle(dataStrat)$values[-1])
 
   resConf <- sirage::fill_confin(dataStrat, rep_len(0.5, nbstrats + 1))
 
