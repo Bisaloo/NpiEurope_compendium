@@ -62,7 +62,12 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
       res <- summarise_estimation(mcmcout, npi_country)
      
       # This is not an issue since the computation of effectiveSize is affine-invariant 
-      mcmcout[, "transmRate", drop = FALSE] <- mcmcout[, "transmRate", drop = FALSE] * 1e8
+      mcmcout <- coda::as.mcmc.list(
+        lapply(mcmcout, function(m) {
+          m[, "transmRate", drop = FALSE] * 1e8
+          return(m)
+        })
+      )
       
       res$ESS <- coda::effectiveSize(mcmcout)
       
