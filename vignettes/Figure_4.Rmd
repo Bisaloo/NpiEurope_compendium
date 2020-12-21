@@ -3,6 +3,7 @@ title: "Figure 4: Additional PHR efficiency gained with NPIs implemented against
 output: rmarkdown::html_document
 params:
   export_figs: false
+  end_date: "2020-09-16"
 ---
 
 ```{r setup, include = FALSE}
@@ -22,7 +23,7 @@ library(ggplot2)
 Importantly, these efficiencies were estimated for countries with very different socio-cultural and economic backgrounds, NPIs were implemented for different lengths of time, and there was substantial overlap between them. To address this, we estimated the change in response efficiency over time when adding or removing a particular NPI, while controlling for GDP, number of NPIs, length of implementation, and country of implementation.
 
 ```{r}
-efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope")
+efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope", date = params$end_date)
 ```
 
 ```{r, fig.cap='Results show the change in PHR efficiency over time when adding each of the 13 NPIs (mean adjusted effect and 95% confidence intervals in multivariate models). Results are disaggregated by level of implementation.'}
