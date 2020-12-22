@@ -64,7 +64,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
       # This is not an issue since the computation of effectiveSize is affine-invariant 
       mcmcout <- coda::as.mcmc.list(
         lapply(mcmcout, function(m) {
-          m[, "transmRate", drop = FALSE] <- m[, "transmRate", drop = FALSE] * 1e8
+          m[, "transmRate"] <- m[, "transmRate"] * 1e8
           return(m)
         })
       )
