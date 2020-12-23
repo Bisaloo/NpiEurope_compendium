@@ -42,14 +42,14 @@ create_summary_country <- function(file, npi_europe) {
   )
 
   cbind(s, skeleton) %>%
-    mutate(across(!any_of(c("strats", "X2.5.", "X97.5.", "start", "end")),
+    mutate(across(!any_of(c("strats", "lower", "upper", "start", "end")),
                   function(x) as.numeric(grepl(paste0(cur_column(), "\\b"), strats)))) %>%
     select(-strats) %>%
     rowwise() %>%
-    mutate(NbStrategies = sum(c_across(!any_of(c("strats", "X2.5.", "X97.5.", "start", "end"))))) %>%
+    mutate(NbStrategies = sum(c_across(!any_of(c("strats", "lower", "upper", "start", "end"))))) %>%
     filter(NbStrategies != 0) %>%
     mutate(
-      Efficiency = (X2.5. + X97.5.) /2,
+      Efficiency = (lower + upper) /2,
       DayStart = start,
       DayEnd = end,
       Country = country,
