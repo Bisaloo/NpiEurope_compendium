@@ -16,7 +16,7 @@ summarise_estimation <- function(MCMC, npi_data) {
 
   MCMC <- as.mcmc(do.call(rbind, MCMC))
 
-  ci_params <- rowMeans(HPDinterval(MCMC, 0.5))
+  ci_params <- HPDinterval(MCMC, 0.5)
 
   rownames(ci_params) <- c("transmRate", rle(dataStrat)$values[-1])
 
