@@ -4,7 +4,11 @@
 \alias{load_epi_data}
 \title{Get epidemiological data for 31 European countries}
 \usage{
-load_epi_data()
+load_epi_data(end_date = Sys.Date())
+}
+\arguments{
+\item{end_date}{The latest date taken into account. (Taken as the end date
+for strategies where no end has been registered.)}
 }
 \description{
 Get epidemiological data for 31 European countries

@@ -4,7 +4,10 @@
 \alias{summarise_estimation}
 \title{Get 95\% credibility intervals for estimations}
 \usage{
-summarise_estimation(MCMC_file, npi_data, contact_data, age_data)
+summarise_estimation(MCMC, npi_data)
+}
+\arguments{
+\item{MCMC}{\code{mcmc} or \code{mcmc.list} object coda object}
 }
 \description{
 Get 95\% credibility intervals for estimations
