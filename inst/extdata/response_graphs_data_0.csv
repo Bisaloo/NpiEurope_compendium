@@ -576,3 +576,18 @@ United Kingdom,StayHomeRiskG,16/03/2020,05/07/2020
 United Kingdom,StayHomeRiskG,05/11/2020,01/12/2020
 United Kingdom,StayHomeRiskGPartial,06/07/2020,01/08/2020
 United Kingdom,TeleworkingClosures,16/03/2020,NA
+Switzerland,ClosHigh,16/03/2020,11/05/2020
+Switzerland,ClosHigh,02/11/2020,NA
+Switzerland,ClosPrim,16/03/2020,11/05/2020
+Switzerland,ClosPubAny,16/03/2020,10/05/2020
+Switzerland,ClosPubAnyPartial,11/05/2020,06/06/2020
+Switzerland,ClosPubAnyPartial,29/10/2020,NA
+Switzerland,ClosSec,16/03/2020,11/05/2020
+Switzerland,MasksMandatory,06/07/2020,NA
+Switzerland,MasksVoluntaryPartial,16/03/2020,05/07/2020
+Switzerland,MassGather50,20/03/2020,05/04/2020
+Switzerland,MassGather50,19/10/2020,NA
+Switzerland,MassGatherAll,28/02/2020,01/10/2020
+Switzerland,MassGatherAll,19/10/2020,NA
+Switzerland,StayHomeRiskG,16/03/2020,NA
+Switzerland,TeleworkingClosures,16/03/2020,NA
