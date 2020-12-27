@@ -47,14 +47,14 @@ This is done in two steps:
 
 ```r
 if (!require("usethis")) {
-  install.package("usethis")
+  install.packages("usethis")
 }
 usethis::create_from_github("Bisaloo/NpiEurope_compendium")
 
-if (!require("remotes")) {
-  install.packages("remotes")
+if (!require("devtools")) {
+  install.packages("devtools")
 }
-remotes::install()
+devtools::install()
 ```
 
 You can now run any code from the `analysis/` or the `vignettes/` folder.
