@@ -18,7 +18,7 @@ load_npi_data <- function(end_date = Sys.Date()) {
     "MassGatherAll", "MassGather50", "ClosPubAny",
     "MasksVoluntaryAllSpaces", "MasksVoluntaryClosedSpaces",
     "MasksMandatoryAllSpaces", "MasksMandatoryClosedSpaces",
-    "Teleworking"
+    "Teleworking", "WorkplaceClosures"
   )
 
   strategies <- c(strategies, paste0(strategies, "Partial"))
@@ -26,6 +26,7 @@ load_npi_data <- function(end_date = Sys.Date()) {
   npi_data <- read.csv(system.file("extdata", "response_graphs_data_2.csv", package = "NpiEurope")) %>%
     filter(Response_measure %in% strategies) %>%
     mutate(Response_measure = gsub("^(Masks(Mandatory|Voluntary))((All|Closed)Spaces)(Partial)?", "\\1\\5", Response_measure)) %>%
+    mutate(Response_measure = gsub("^WorkplaceClosures", "Teleworking", Response_measure)) %>%
     mutate(across(c(date_start, date_end), as.Date)) %>%
     mutate(date_end = if_else(is.na(date_end), end_date, date_end))
 
