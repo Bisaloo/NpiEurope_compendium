@@ -14,7 +14,7 @@ load_npi_data <- function(end_date = Sys.Date()) {
 
   strategies <- c(
     "StayHomeOrder", "StayHomeGen",
-    "ClosDayCare", "ClosPrim", "ClosSec", "ClosHigh",
+    "ClosDaycare", "ClosPrim", "ClosSec", "ClosHigh",
     "MassGatherAll", "MassGather50", "ClosPubAny",
     "MasksVoluntaryAllSpaces", "MasksVoluntaryClosedSpaces",
     "MasksMandatoryAllSpaces", "MasksMandatoryClosedSpaces",
