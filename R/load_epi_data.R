@@ -15,6 +15,7 @@ load_epi_data <- function(end_date = Sys.Date()){
            colClasses = c("Date", "integer", "integer", "character")) %>%
     filter(Date <= end_date) %>%
     group_by(Country) %>%
-    filter(cumsum(NewCases) > 0)
+    filter(cumsum(NewCases) > 0) %>%
+    ungroup()
 
 }
