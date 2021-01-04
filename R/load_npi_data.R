@@ -39,14 +39,9 @@ load_npi_data <- function(end_date = Sys.Date()) {
 
   npi_data <- rbind(npi_data, holidays)
 
-  start_date <- min(npi_data$date_start, npi_data$date_start, na.rm = TRUE)
+  epi_data <- load_epi_data(end_date = end_date)
 
-  skeleton <- merge(
-    data.frame("Date" = seq(start_date, end_date, by = 1)),
-    data.frame("Country" = unique(npi_data$Country))
-  )
-
-  npi_data <- merge(npi_data, skeleton) %>%
+  npi_data <- merge(npi_data, epi_data) %>%
     group_by(Country) %>%
     mutate(in_use = Date >= date_start & Date <= date_end) %>%
     group_by(Country, Date, Response_measure) %>%
