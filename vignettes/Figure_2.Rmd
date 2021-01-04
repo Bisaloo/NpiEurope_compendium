@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   message = FALSE
 )
 if (params$export_figs) {
-  ncols = 5
+  ncols = 6
 } else {
   ncols = 3
 }
@@ -87,8 +87,13 @@ simulations_observations <- list.files("../MCMC_NpiEurope", pattern = "\\.rds$",
 ```{r}
 simulations_observations %>%
   group_by(Country) %>%
-  summarise(R = cor(NewCases, sims_med)) %>%
-  add_row(Country = "Global", R = cor(simulations_observations$NewCases, simulations_observations$sims_med)) %>%
+  summarise(R = cor(NewCases, sims_med),
+            p = cor.test(NewCases, sims_med)$p.value) %>%
+  add_row(Country = "Global", 
+          R = cor(simulations_observations$NewCases, simulations_observations$sims_med),
+          p = cor.test(simulations_observations$NewCases, simulations_observations$sims_med)$p.value) %>%
+  mutate(R = sprintf("%.2f", R),
+         p = sprintf("%.2e", p)) %>%
   knitr::kable()
 ```
 
