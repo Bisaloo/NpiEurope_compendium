@@ -55,7 +55,17 @@ duration_plot <- npi_europe %>%
 
 # Subfig B
 
-Across all the public health responses analysed, stay at home orders, bans on mass gatherings and school/university closures were typically implemented together.
+```{r}
+nb_phrs <- npi_europe %>%
+  select(-Date, -Country) %>%
+  rowwise() %>%
+  mutate(phr = paste0(c_across(), collapse = "")) %>%
+  pull(phr) %>%
+  unique() %>%
+  length()
+```
+
+Across all the public health responses analysed (336), stay at home orders, bans on mass gatherings and school/university closures were typically implemented together.
 
 ```{r, fig.width=10, fig.asp=1, fig.cap='Correlation between implementation of each pair of non-pharmaceutical interventions (NPIs) as part of public health responses. A positive correlation (green circles) reflects that a pair of NPIs were commonly implemented together.'}
 library(ggcorrplot)
