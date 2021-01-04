@@ -87,8 +87,9 @@ simulations_observations <- list.files("../MCMC_NpiEurope", pattern = "\\.rds$",
 ```{r}
 simulations_observations %>%
   group_by(Country) %>%
-  summarise(R2 = cor(NewCases, sims_med)) %>%
-  add_row(Country = "Global", R2 = cor(simulations_observations$NewCases, simulations_observations$sims_med))
+  summarise(R = cor(NewCases, sims_med)) %>%
+  add_row(Country = "Global", R = cor(simulations_observations$NewCases, simulations_observations$sims_med)) %>%
+  knitr::kable()
 ```
 
 ```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}

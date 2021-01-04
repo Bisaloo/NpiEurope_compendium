@@ -26,8 +26,8 @@ Importantly, these efficiencies were estimated for countries with very different
 efficiency_matrix <- NpiEurope::create_summary_matrix("../MCMC_NpiEurope", date = params$end_date)
 ```
 
-```{r, fig.cap='Results show the change in PHR efficiency over time when adding each of the 13 NPIs (mean adjusted effect and 95% confidence intervals in multivariate models). Results are disaggregated by level of implementation.'}
-efficiency_matrix %>%
+```{r}
+effect_npi_addition <- efficiency_matrix %>%
   group_by(Country) %>%
   mutate(dif.efficiency = Efficiency - lag(Efficiency, default = 0),
          GDP = GDP / 1e4) %>%
@@ -52,7 +52,19 @@ efficiency_matrix %>%
          up.ci.control = est + 1.96 * sd,
          .keep = "unused") %>%
   mutate(Partial = ifelse(grepl("Partial$", NPI), "Partial", "Complete"),
-         NPI = gsub("Partial$", "", NPI)) %>%
+         NPI = gsub("Partial$", "", NPI))
+```
+
+```{r}
+effect_npi_addition %>%
+  filter(Partial == "Complete") %>%
+  select(-Partial) %>%
+  knitr::kable(digits = 3)
+```
+
+
+```{r, fig.cap='Results show the change in PHR efficiency over time when adding each of the 13 NPIs (mean adjusted effect and 95% confidence intervals in multivariate models). Results are disaggregated by level of implementation.'}
+effect_npi_addition %>%
   ggplot(aes(x = diff.effect.control, y = NPI)) +
   geom_vline(xintercept = 0, color = "darkred", size = 1, linetype = "dashed") +
   geom_errorbarh(aes(xmin = low.ci.control, xmax = up.ci.control)) +
@@ -61,6 +73,7 @@ efficiency_matrix %>%
   labs(x = "Change in efficiency when adding each NPI", y = "") +
   theme_bw()
 ```
+
 ```{r, eval = params$export_figs}
 ggsave("Figure 4.pdf", width = 29.7, height = 21, units = "cm")
 ```
