@@ -42,7 +42,8 @@ number_efficiency_plot <- ggplot(efficiency_matrix, aes(x = NbStrategies, y = Ef
   geom_smooth(method = "lm") +
   annotate("text", x = 12, y = 0.37, color = "darkblue",
            label = sprintf(
-             "R² = %.2f\np = %.2e", 
+             "slope = %.3f\nR² = %.2f\np = %.2e", 
+             lm(Efficiency ~ NbStrategies, efficiency_matrix)$coefficients[2],
              cor(efficiency_matrix$NbStrategies, efficiency_matrix$Efficiency),
              cor.test(efficiency_matrix$NbStrategies, efficiency_matrix$Efficiency)$p.value),
            parse = FALSE) +
