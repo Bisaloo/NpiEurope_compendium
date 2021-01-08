@@ -34,7 +34,7 @@ Overall, the combination of NPIs implemented as part of PHRs across Europe had a
 hist_plot <- ggplot(efficiency_matrix, aes(y = Efficiency)) +
   geom_histogram(binwidth = 0.05, fill = "#69b3a2", color = "#e9ecef", alpha = 0.9) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
-  labs(x = "Public Health Responses")
+  labs(x = "Public Health Responses", y = "Effectiveness")
 )
 (
 number_efficiency_plot <- ggplot(efficiency_matrix, aes(x = NbStrategies, y = Efficiency)) +
@@ -48,7 +48,7 @@ number_efficiency_plot <- ggplot(efficiency_matrix, aes(x = NbStrategies, y = Ef
              cor.test(efficiency_matrix$NbStrategies, efficiency_matrix$Efficiency)$p.value),
            parse = FALSE) +
   geom_hline(yintercept = 0.66, color = "darkred", lty = "dashed", size = 2) +
-  labs(x = "NPIs implemented") +
+  labs(x = "NPIs implemented", y = "Effectiveness") +
   scale_x_continuous(breaks = seq(1, 13, 2))
 )
 ```
@@ -107,7 +107,7 @@ max_efficiency_plot <- efficiency_matrix %>%
 ```{r, eval = params$export_figs}
 library(patchwork)
 
-((hist_plot / number_efficiency_plot) | efficiency_uni_plot | max_efficiency_plot) + 
+hist_plot + number_efficiency_plot + 
   plot_annotation(tag_levels = "A")
 ggsave("Figure 3.pdf", width = 50, height = 25, units = "cm")
 ```
