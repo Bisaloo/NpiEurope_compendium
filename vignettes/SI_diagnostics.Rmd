@@ -23,7 +23,7 @@ npi_europe <- load_npi_data(end_date = params$end_date)
 ```
 
 ```{r}
-nchains <- length(readRDS("../MCMC_NpiEurope/Austria.rds"))
+nchains <- length(readRDS("../MCMC_NpiEurope/Austria.rds")$samples)
 ```
 
 We estimated transmission rates per country over time through Bayesian inference
@@ -54,12 +54,12 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
       
       cat("### ", country, "\n\n")
       
-      plot(mcmcout[, "transmRate", drop = FALSE])
+      plot(mcmcout$samples[, "transmRate", drop = FALSE])
       
-      for (i in 2:ncol(mcmcout[[1]])) {
+      for (i in 2:ncol(mcmcout$samples[[1]])) {
         par(mfrow = c(1, 2))
-        coda::traceplot(mcmcout[, i, drop = FALSE], ylim = c(0, 1))
-        coda::densplot(mcmcout[, i, drop = FALSE], xlim = c(0, 1))
+        coda::traceplot(mcmcout$samples[, i, drop = FALSE], ylim = c(0, 1))
+        coda::densplot(mcmcout$samples[, i, drop = FALSE], xlim = c(0, 1))
       }
       
 
@@ -67,7 +67,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
      
       # This is not an issue since the computation of effectiveSize is affine-invariant 
       mcmcout <- coda::as.mcmc.list(
-        lapply(mcmcout, function(m) {
+        lapply(mcmcout$samples, function(m) {
           m[, "transmRate"] <- m[, "transmRate"] * 1e8
           return(m)
         })

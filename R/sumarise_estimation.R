@@ -14,7 +14,7 @@ summarise_estimation <- function(MCMC, npi_data) {
 
   nbstrats <- length(name_strats)
 
-  MCMC <- as.mcmc(do.call(rbind, MCMC))
+  MCMC <- as.mcmc(do.call(rbind, MCMC$samples))
 
   ci_params <- HPDinterval(MCMC, 0.5)
 
