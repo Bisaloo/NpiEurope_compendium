@@ -57,7 +57,7 @@ simulate_from_MCMC <- function(file, npi_europe, epi_europe) {
   age_country <- sirage::load_age_data(country)
 
   sims <- sirage::simulate_trajectory(
-    readRDS(file),
+    readRDS(file)$samples,
     epi_country, npi_country, contact_country, age_country,
     Npost = 20
   )
