@@ -16,6 +16,7 @@ if (params$export_figs) {
 } else {
   ncols = 3
 }
+Sys.setlocale("LC_TIME", "en_US.UTF-8")
 ```
 
 ```{r}
@@ -100,9 +101,11 @@ simulations_observations %>%
 ```{r, fig.height=15, fig.cap='Each panel shows model predictions (black shaded area) and confirmed number of new COVID-19 cases over time for each country.'}
 simulations_observations  %>%
   ggplot(aes(x = Date)) +
-    geom_ribbon(aes(ymin = sims_low, ymax = sims_high)) +
+    geom_ribbon(aes(ymin = sims_low, ymax = sims_high), alpha = 0.7) +
+    geom_line(aes(y = sims_med)) +
     geom_line(aes(y = NewCases), col = "red") +
-    facet_wrap(~ Country, scales = "free_y", ncol = ncols)
+    facet_wrap(~ Country, scales = "free_y", ncol = ncols) +
+    labs(y = "New Cases")
 ```
 
 ```{r, eval = params$export_figs}
