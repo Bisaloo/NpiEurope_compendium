@@ -23,7 +23,7 @@ load_npi_data <- function(end_date = Sys.Date()) {
 
   strategies <- c(strategies, paste0(strategies, "Partial"))
 
-  npi_data <- read.csv(system.file("extdata", "response_graphs_data_2.csv", package = "NpiEurope")) %>%
+  npi_data <- read.csv("https://www.ecdc.europa.eu/sites/default/files/documents/response_graphs_data_2.csv") %>%
     filter(Response_measure %in% strategies) %>%
     mutate(Response_measure = gsub("^(Masks(Mandatory|Voluntary))((All|Closed)Spaces)(Partial)?", "\\1\\5", Response_measure)) %>%
     mutate(Response_measure = gsub("^WorkplaceClosures", "Teleworking", Response_measure)) %>%

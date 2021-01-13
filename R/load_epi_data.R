@@ -11,11 +11,13 @@
 #' @export
 load_epi_data <- function(end_date = Sys.Date()){
 
+  end_date <- as.Date(end_date)
+
   read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv") %>%
     filter(continentExp == "Europe") %>%
-    transmute(Date = as.Date(paste(year, month, day, sep = "-")),
-              NewCases = cases,
-              NewDeaths = deaths,
+    transmute(Date = as.Date(dateRep, "%d/%m/%Y"),
+              NewCases = cases_weekly,
+              NewDeaths = deaths_weekly,
               Country = countriesAndTerritories) %>%
     filter(Country %in% c("Austria",
                           "Belgium", "Bulgaria",
@@ -34,10 +36,11 @@ load_epi_data <- function(end_date = Sys.Date()){
                           "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
                           "United_Kingdom")) %>%
     mutate(Country = if_else(Country == "United_Kingdom", "United Kingdom", Country)) %>%
+    arrange(Country, Date) %>%
     filter(Date <= end_date) %>%
     group_by(Country) %>%
     filter(cumsum(NewCases) > 0) %>%
     ungroup() %>%
-    arrange(Country, Date)
+    identity()
 
 }
