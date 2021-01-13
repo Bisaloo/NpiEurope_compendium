@@ -11,11 +11,33 @@
 #' @export
 load_epi_data <- function(end_date = Sys.Date()){
 
-  read.csv(system.file("extdata", "epi_europe.csv", package = "NpiEurope"),
-           colClasses = c("Date", "integer", "integer", "character")) %>%
+  read.csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv") %>%
+    filter(continentExp == "Europe") %>%
+    transmute(Date = as.Date(paste(year, month, day, sep = "-")),
+              NewCases = cases,
+              NewDeaths = deaths,
+              Country = countriesAndTerritories) %>%
+    filter(Country %in% c("Austria",
+                          "Belgium", "Bulgaria",
+                          "Croatia", "Cyprus", "Czechia",
+                          "Denmark",
+                          "Estonia",
+                          "Finland", "France",
+                          "Germany", "Greece",
+                          "Hungary",
+                          "Iceland", "Ireland", "Italy",
+                          "Latvia", "Liechtenstein", "Lithuania", "Luxembourg",
+                          "Malta",
+                          "Netherlands", "Norway",
+                          "Poland", "Portugal",
+                          "Romania",
+                          "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland",
+                          "United_Kingdom")) %>%
+    mutate(Country = if_else(Country == "United_Kingdom", "United Kingdom", Country)) %>%
     filter(Date <= end_date) %>%
     group_by(Country) %>%
     filter(cumsum(NewCases) > 0) %>%
-    ungroup()
+    ungroup() %>%
+    arrange(Country, Date)
 
 }
