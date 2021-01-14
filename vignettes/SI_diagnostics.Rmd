@@ -73,7 +73,7 @@ tabres <- list.files("../MCMC_NpiEurope/", "\\.rds$", full.names = TRUE) %>%
         })
       )
       
-      res$ESS <- coda::effectiveSize(mcmcout$samples)
+      res$ESS <- coda::effectiveSize(mcmcout)
       
       # res$Geweke <- sprintf("%.2e", pnorm(abs(geweke.diag(mcmcout)$z),lower.tail=FALSE)*2)
       
