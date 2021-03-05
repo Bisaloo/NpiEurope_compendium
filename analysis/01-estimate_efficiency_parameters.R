@@ -5,6 +5,7 @@ devtools::load_all()
 oldfolder <- "goodstart"
 
 resfolder <- paste("weekly_transmRate", Sys.Date(), stringi::stri_rand_strings(1, 10), sep = "_")
+message(resfolder)
 dir.create(resfolder)
 
 countries <- c("Austria",
@@ -31,7 +32,9 @@ library(doFuture)
 # by setting the R_FUTURE_PLAN env variable.
 registerDoFuture()
 
-foreach (country=countries) %dopar% {
+library(doRNG)
+
+foreach (country=countries) %dorng% {
 
   message(country)
 
