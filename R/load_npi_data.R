@@ -3,6 +3,9 @@
 #' @param end_date The latest date taken into account. (Taken as the end date
 #' for strategies where no end has been registered.)
 #'
+#' @references
+#' https://www.ecdc.europa.eu/en/publications-data/download-data-response-measures-covid-19
+#'
 #' @importFrom utils read.csv
 #' @importFrom dplyr %>% mutate across if_else transmute relocate group_by summarise ungroup filter any_of
 #' @importFrom tidyr pivot_wider
@@ -23,7 +26,13 @@ load_npi_data <- function(end_date = Sys.Date()) {
 
   strategies <- c(strategies, paste0(strategies, "Partial"))
 
-  npi_data <- read.csv("https://www.ecdc.europa.eu/sites/default/files/documents/response_graphs_data_2.csv") %>%
+  npi_data_location <- "https://www.ecdc.europa.eu/en/publications-data/download-data-response-measures-covid-19" %>%
+    rvest::read_html() %>%
+    rvest::html_elements(".download__item a") %>%
+    rvest::html_attr("href") %>%
+    { grep("\\.csv$", ., value = TRUE) }
+
+  npi_data <- read.csv(npi_data_location) %>%
     filter(Response_measure %in% strategies) %>%
     mutate(Response_measure = gsub("^(Masks(Mandatory|Voluntary))((All|Closed)Spaces)(Partial)?", "\\1\\5", Response_measure)) %>%
     mutate(Response_measure = gsub("^WorkplaceClosures", "Teleworking", Response_measure)) %>%
@@ -39,9 +48,12 @@ load_npi_data <- function(end_date = Sys.Date()) {
 
   npi_data <- rbind(npi_data, holidays)
 
-  epi_data <- load_epi_data(end_date = end_date)
+  skeleton <- merge(
+    data.frame("Date" = seq(as.Date("2019-12-01"), end_date, by = 1)),
+    data.frame("Country" = unique(npi_data$Country))
+  )
 
-  npi_data <- merge(npi_data, epi_data) %>%
+  npi_data <- merge(npi_data, skeleton) %>%
     group_by(Country) %>%
     mutate(in_use = Date >= date_start & Date <= date_end) %>%
     group_by(Country, Date, Response_measure) %>%
