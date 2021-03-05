@@ -3,8 +3,9 @@ library(dplyr)
 library(sirage)
 library(NpiEurope)
 
-folder <- "MCMC_NpiEurope"
-dir.create(folder)
+
+resfolder <- paste("weekly_transmRate", Sys.Date(), stringi::stri_rand_strings(1, 10), sep = "_")
+dir.create(resfolder)
 
 countries <- c("Austria",
                "Belgium", "Bulgaria",
