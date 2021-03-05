@@ -28,7 +28,6 @@ library(doFuture)
 # To make sure this works fine on all machines, we don't force a parallelization
 # strategy here. The user should chose it either by running future::plan() or
 # by setting the R_FUTURE_PLAN env variable.
-
 registerDoFuture()
 
 foreach (country=countries) %dopar% {
@@ -37,30 +36,35 @@ foreach (country=countries) %dopar% {
 
   contact_data <- load_contact_data(country)
   age_data <- load_age_data(country)
-  epi_data <- load_epi_data() %>%
-    filter(Country == country) %>%
-    select(-Country) %>%
-    mutate(NewCases = pmax(NewCases, 0),
-           NewDeaths = pmax(NewDeaths, 0)) %>%
+  epi_data <- covidregionaldata::get_national_data(country, source = "who") %>%
+    select(date, cases_new, deaths_new) %>%
+    mutate(
+      Date = date,
+      NewCases = pmax(cases_new, 0),
+      NewDeaths = pmax(deaths_new, 0),
+      .keep = "unused"
+    ) %>%
+    filter(cumsum(NewCases) > 0) %>%
     mutate(lower = asymptor::estimate_asympto(Date, NewCases, NewDeaths, bounds = "lower")$lower) %>%
     mutate(PropAsympto = lower / (lower+NewCases)) %>%
     mutate(PropAsympto = ifelse(is.finite(PropAsympto), PropAsympto, 0)) %>%
-    mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 3, .after = 3, .complete = FALSE))
+    mutate(PropAsympto = slider::slide_dbl(PropAsympto, mean, .before = 1, .after = 1, .complete = FALSE))
 
   npi_data <- load_npi_data() %>%
     filter(Country == country) %>%
-    select(-Country)
+    select(-Country) %>%
+    filter(Date %in% epi_data$Date)
 
-  oldchain <- read.csv(sprintf("%s/%s.csv", folder, country))
-  transmRate0 <- oldchain$transmRate[nrow(oldchain)]
-  vecEff0 <-  unlist(oldchain[nrow(oldchain), grepl("^vecEff", colnames(oldchain))])
+  oldchain <- read.csv(sprintf("%s/%s.csv", oldfolder, country))
+  transmRates0 <-  unlist(oldchain[which.max(oldchain$Likelihood), grepl("^transmRate", colnames(oldchain))])
 
   res <- simulate_country(epi_data, npi_data, contact_data, age_data,
                           task = "estimate",
-                          Np = 10, Niter = 50,
-                          transmRate = transmRate0, vecEff = vecEff0,
-                          outfile = paste0(folder, "/", country))
+                          Np = 10, Niter = 1000,
+                          transmRates = transmRates0,
+                          outfile = paste0(resfolder, "/", country),
+                          min_npi_duration = 5)
 
-  saveRDS(res, sprintf("%s/fullmcmc_%s.rds", folder, country))
+  saveRDS(res, sprintf("%s/fullmcmc_%s.rds", resfolder, country))
 
 }
