@@ -32,6 +32,8 @@ library(doFuture)
 # by setting the R_FUTURE_PLAN env variable.
 registerDoFuture()
 
+remotes::install_github("bisaloo/sirmodels")
+
 library(doRNG)
 
 foreach (country=countries) %dorng% {
