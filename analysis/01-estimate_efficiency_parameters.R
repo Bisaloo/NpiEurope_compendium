@@ -87,7 +87,7 @@ foreach (country=countries) %dorng% {
   transmRate0 <- unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "transm")])
 
   if (length(transmRate0) < nbstrats) {
-    transmRate0 <- c(transmRate0, rep_len(mean(transmRate0), length(transmRate0) - nbstrats))
+    transmRate0 <- c(transmRate0, rep_len(mean(transmRate0), nbstrats - length(transmRate0)))
   } else if (length(transmRate0) > nbstrats) {
     transmRate0 <- transmRate0[seq_len(nbstrats)]
   }
@@ -95,17 +95,20 @@ foreach (country=countries) %dorng% {
   names(transmRate0) <- paste0("transm", seq_along(transmRate0))
 
   susc_rates <- setNames(
-    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "susc")]),
+    #unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "susc")]),
+    rep_len(0.9, 8),
     paste0("susc", seq_len(8))
   )
 
   taus <- setNames(
-    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "tau")]),
+#    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "tau")]),
+    rep_len(2, 2),
     paste0("tau", seq_len(2))
   )
 
   death_delay <- setNames(
-    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "death")]),
+#    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "death")]),
+    15,
     "death_delay"
   )
 
@@ -133,6 +136,6 @@ foreach (country=countries) %dorng% {
     vaccine_start = 0
   )
 
-  saveRDS(resmc, sprintf("%s/fullmcmc2_%s.rds", resfolder, state))
+  saveRDS(resmc, sprintf("%s/fullmcmc2_%s.rds", resfolder, country))
 
 }
