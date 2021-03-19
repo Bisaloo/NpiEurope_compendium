@@ -1,4 +1,4 @@
-library(dplyr)
+library(tidyverse)
 
 devtools::load_all()
 
@@ -96,12 +96,6 @@ foreach (country=countries) %dorng% {
 
   names(transmRate0) <- paste0("transm", seq_along(transmRate0))
 
-  susc_rates <- setNames(
-    #unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "susc")]),
-    rep_len(0.9, 8),
-    paste0("susc", seq_len(8))
-  )
-
   taus <- setNames(
 #    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "tau")]),
     rep_len(2, 2),
@@ -114,13 +108,16 @@ foreach (country=countries) %dorng% {
     "death_delay"
   )
 
-  vcv <- matrix(0, nrow = nbstrats + 8 + 2 + 1, ncol = nbstrats + 8 + 2 + 1)
+  leth_coeff <- unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "leth")]) %||% 4
+  names(leth_coeff) <- "leth_coeff"
 
-  diag(vcv) <- c(rep_len(1e-18, nbstrats), rep_len(0.01, 8), rep_len(0.01, 2), 0.25)
+  vcv <- matrix(0, nrow = nbstrats+ 2 + 1 + 1, ncol = nbstrats + 2 + 1 + 1)
+
+  diag(vcv) <- c(rep_len(1e-18, nbstrats), rep_len(0.01, 2), 0.25, 0.1)
 
   resmc <- simpleMH::simpleMH(
-    sirmodels::SEIR_age_get_lkl,
-    inits = c(transmRate0, susc_rates, taus, death_delay),
+    sirmodels::SEIR_age_get_lkl_deaths_cases,
+    inits = c(transmRate0, taus, death_delay, leth_coeff),
     theta.cov = vcv,
     max.iter = 10,
     coda = TRUE,
@@ -131,7 +128,6 @@ foreach (country=countries) %dorng% {
     t_changes = tchanges,
     prop_asympto = epi_data$PropAsympto,
     contact_matrix = contact_data,
-    lethality_age = c(0.01, 0, 0.01, 0.02, 0.05, 0.11, 0.24, 0.4),
     severity_age = rep_len(0, 8L),
     rho = 0,
     vaccine_eff = 0,
