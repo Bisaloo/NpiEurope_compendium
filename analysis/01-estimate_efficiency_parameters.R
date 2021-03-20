@@ -85,7 +85,7 @@ foreach (country=countries) %dorng% {
 
   tchanges <- cumsum(rle(dataStrat)$lengths) + 1
 
-  oldchain <- read.csv(sprintf("%s/%s.csv", oldfolder, country))
+  oldchain <- readRDS(sprintf("%s/%s.rds", oldfolder, country))
   transmRate0 <- unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "transm")])
 
   if (length(transmRate0) < nbstrats) {
@@ -97,14 +97,12 @@ foreach (country=countries) %dorng% {
   names(transmRate0) <- paste0("transm", seq_along(transmRate0))
 
   taus <- setNames(
-#    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "tau")]),
-    rep_len(2, 2),
+    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "tau")]),
     paste0("tau", seq_len(2))
   )
 
   death_delay <- setNames(
-#    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "death")]),
-    15,
+    unlist(oldchain[which.max(oldchain$Likelihood), startsWith(names(oldchain), "death")]),
     "death_delay"
   )
 
@@ -119,11 +117,11 @@ foreach (country=countries) %dorng% {
     sirmodels::SEIR_age_get_lkl_deaths_cases,
     inits = c(transmRate0, taus, death_delay, leth_coeff),
     theta.cov = vcv,
-    max.iter = 10,
+    max.iter = 500,
     coda = TRUE,
     obs = epi_data,
     t = c(0, seq_along(epi_data$Date)),
-    Np = 1,
+    Np = 50,
     P0 = P0,
     t_changes = tchanges,
     prop_asympto = epi_data$PropAsympto,
