@@ -31,6 +31,7 @@ library(doFuture)
 # strategy here. The user should chose it either by running future::plan() or
 # by setting the R_FUTURE_PLAN env variable.
 registerDoFuture()
+future::plan("multicore", workers = parallelly::availableCores())
 
 remotes::install_github("bisaloo/sirmodels")
 
